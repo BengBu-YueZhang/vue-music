@@ -1,0 +1,1 @@
+import JSONP from 'jsonp'
