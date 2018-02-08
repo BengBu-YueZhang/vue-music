@@ -1,21 +1,21 @@
 <template>
   <div id="app">
-    Hello Vue
+    <music-header></music-header>
     <router-view/>
   </div>
 </template>
 
 <script>
+import MusicHeader from './components/MusicHeader/MusicHeader'
 export default {
-  name: 'App'
+  name: 'App',
+  
+  components: {
+    MusicHeader
+  }
 }
 </script>
 
 <style scoped lang="less">
-@import "./common/css/variable.less";
-
-#app {
-  color: @color-theme;
-}
 </style>
 
