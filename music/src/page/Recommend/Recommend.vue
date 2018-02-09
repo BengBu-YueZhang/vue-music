@@ -3,22 +3,28 @@
         <music-swiper
             :slider="this.slider"
         ></music-swiper>
+        <MusicTitle title="热门歌单推荐"/>
+        <MusicRecommendSong :song-list="songList"/>
     </section>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import MusicSwiper from './../../components/MusicSwiper/MusicSwiper'
+import MusicRecommendSong from './../../components/MusicRecommendSong/MusicRecommendSong'
+import MusicTitle from './../../components/MusicTitle/MusicTitle'
 
 export default {
     components: {
-        MusicSwiper
+        MusicSwiper,
+        MusicRecommendSong,
+        MusicTitle
     },
 
     data () {
         return {
             slider: [],
-            songList: [],
+            songList: []
         }
     },
 
