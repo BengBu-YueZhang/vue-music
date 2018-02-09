@@ -1,5 +1,5 @@
 
-import { getCarouselDataAjax } from './../../api/recommend'
+import { getCarouselDataAjax, getRecommendSongListAjax } from './../../api/recommend'
 
 export default {
     namespaced: true,
@@ -10,6 +10,11 @@ export default {
         async GetCarouselDataAjax () {
             const carousel = await getCarouselDataAjax()
             return carousel
+        },
+
+        async GetRecommendSongListAjax () {
+            const recommendSongList = await getRecommendSongListAjax()
+            return recommendSongList
         }
     }
 }

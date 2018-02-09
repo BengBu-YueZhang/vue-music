@@ -17,17 +17,20 @@ export default {
 
     data () {
         return {
-            slider: []
+            slider: [],
+            songList: [],
         }
     },
 
     created () {
         this.getCarouseData()
+        this.getRecommendSongList()
     },
 
     methods : {
         ...mapActions('recommend', [
-            'GetCarouselDataAjax'
+            'GetCarouselDataAjax',
+            'GetRecommendSongListAjax'
         ]),
 
         /**
@@ -40,11 +43,22 @@ export default {
             }).catch(err => {
                 console.log(err)
             })
+        },
+
+        /**
+         * 获取推荐歌单
+         */
+        getRecommendSongList () {
+            this.GetRecommendSongListAjax().then(res => {
+                if (parseInt(res.code) !== 0) throw new Error(res)
+                this.songList = res.data.list
+            }).catch(err => {
+                console.log(err)
+            })
         }
     }
 }
 </script>
 
 <style lang="less" scoped>
-
 </style>
