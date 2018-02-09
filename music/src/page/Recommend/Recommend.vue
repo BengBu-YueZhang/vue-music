@@ -18,7 +18,9 @@
 </template>
 
 <script>
+
 import { mapActions } from 'vuex'
+import { OK } from './../../config/index'
 import MusicSwiper from './../../components/MusicSwiper/MusicSwiper'
 import MusicRecommendSong from './../../components/MusicRecommendSong/MusicRecommendSong'
 import MusicTitle from './../../components/MusicTitle/MusicTitle'
@@ -57,7 +59,7 @@ export default {
          */
         getCarouseData () {
             this.GetCarouselDataAjax().then(res => {
-                if (parseInt(res.code) !== 0) throw new Error(res)
+                if (parseInt(res.code) !== OK) throw new Error(res)
                 this.slider = res.data.slider
             }).catch(err => {
                 console.log(err)
@@ -69,7 +71,7 @@ export default {
          */
         getRecommendSongList () {
             this.GetRecommendSongListAjax().then(res => {
-                if (parseInt(res.code) !== 0) throw new Error(res)
+                if (parseInt(res.code) !== OK) throw new Error(res)
                 this.songList = res.data.list
             }).catch(err => {
                 console.log(err)
