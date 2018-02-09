@@ -4,8 +4,20 @@
             class="scroll-view-wrappper"
             :scroll-data="singerList"
             ref="iscoll">
-            <music-singer-main-list :singer-data="singerList">
-            </music-singer-main-list>
+            <ul class="singer-list-wrapper">
+                <li v-for="(singerItem, index) in singerList"
+                    :key="index">
+                    <h3 class="singer-title">{{singerItem.key}}</h3>
+                    <ul class="singer-content">
+                        <li class="singer-content-item"
+                            v-for="singerContent in singerItem.items"
+                            :key="singerContent.id">
+                            <img v-lazy="singerContent.imgurl">
+                            <span>{{singerContent.name}}</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </music-scroll>
         <MusicSingerQuickList
             @touch-start="touchStart"
@@ -96,13 +108,15 @@ export default {
          * @param {Number} index 索引
          */
         touchStart (index) {
-            console.log(index)
+            
         }
     }
 }
 </script>
 
 <style lang="less" scoped>
+@import './../../common/css/variable.less';
+
 .singer-wrappper {
    position: absolute;
     left: 0;
@@ -124,5 +138,40 @@ export default {
 .scroll-view {
     width: 100%;
     height: auto;
+}
+
+.singer-list-wrapper {
+    width: 100%;
+    height: auto;
+}
+
+.singer-title {
+    width: 100%;
+    font-size: @font-size-medium;
+    font-weight: normal;
+    color: @color-text-l;
+    line-height: 14px;
+    padding: 8px 0 8px 14px;
+    box-sizing: border-box;
+    background-color: @color-highlight-background;
+}
+
+.singer-content-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+    padding: 20px 0 0 30px;
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+    span {
+        margin-left: 20px;
+        font-size: @font-size-medium;
+        color: @color-text-l;
+    }
 }
 </style>
