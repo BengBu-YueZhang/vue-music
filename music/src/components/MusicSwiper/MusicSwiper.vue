@@ -35,7 +35,7 @@ export default {
             // swiper配置
             swiperOption: {
                 autoplay: {
-                    delay: 250000,
+                    delay: 2500,
                     disableOnInteraction: false
                 },
                 pagination: {

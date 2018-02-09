@@ -13,12 +13,14 @@ import { mapActions } from 'vuex'
 import MusicSwiper from './../../components/MusicSwiper/MusicSwiper'
 import MusicRecommendSong from './../../components/MusicRecommendSong/MusicRecommendSong'
 import MusicTitle from './../../components/MusicTitle/MusicTitle'
+import MusicScroll from './../../components/MusicScroll/MusicScroll'
 
 export default {
     components: {
         MusicSwiper,
         MusicRecommendSong,
-        MusicTitle
+        MusicTitle,
+        MusicScroll
     },
 
     data () {
