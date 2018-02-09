@@ -6,6 +6,7 @@
             ref="iscoll">
             <ul class="singer-list-wrapper">
                 <li v-for="(singerItem, index) in singerList"
+                    ref="singerList"
                     :key="index">
                     <h3 class="singer-title">{{singerItem.key}}</h3>
                     <ul class="singer-content">
@@ -108,7 +109,7 @@ export default {
          * @param {Number} index 索引
          */
         touchStart (index) {
-            
+            this.$refs.iscoll.scrollToElement(this.$refs.singerList[index], 0)
         }
     }
 }
