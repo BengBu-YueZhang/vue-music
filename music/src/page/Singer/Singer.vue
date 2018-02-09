@@ -1,5 +1,12 @@
 <template>
     <section class="singer-wrappper">
+        <music-scroll 
+            class="scroll-view-wrappper"
+            :scroll-data="singerList"
+            ref="iscoll">
+            <music-singer-main-list :singer-data="singerList"></music-singer-main-list>
+        </music-scroll>
+        <MusicSingerQuickList :singer-data="singerList"></MusicSingerQuickList>
     </section>
 </template>
 
@@ -8,9 +15,15 @@ import { mapActions } from 'vuex'
 import { OK } from './../../config/index'
 import Singer from './../../model/Singer'
 import { slice, uniq, map, sort, filter, compose, forEach} from 'ramda'
+import MusicSingerQuickList from './../../components/MusicSingerQuickList/MusicSingerQuickList'
+import MusicSingerMainList from './../../components/MusicSingerMainList/MusicSingerMainList'
+import MusicScroll from './../../components/MusicScroll/MusicScroll'
 
 export default {
-    component: {
+    components: {
+        MusicSingerQuickList,
+        MusicSingerMainList,
+        MusicScroll
     },
 
     data () {
@@ -35,7 +48,6 @@ export default {
         getSingerList () {
             this.GetSingerListAjax().then(res => {
                 if (parseInt(res.code) !== OK) throw new Error(res.message)
-                console.log(res)
                 this.singerList = this.formattedSingerData(res.data.list)
             }).catch(err => {
                 console.log(err)
@@ -69,7 +81,7 @@ export default {
             }
             newSingerList = sort(sortletter, newSingerList)
             newSingerList.unshift({
-                key: 'hot',
+                key: '热门',
                 items: hostSinger
             })
             return newSingerList
@@ -79,4 +91,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.scroll-view-wrappper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 88px;
+    overflow: hidden;
+}
+
+.scroll-view {
+    width: 100%;
+    height: auto;
+}
 </style>
