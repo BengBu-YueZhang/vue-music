@@ -1,7 +1,7 @@
 <template>
     <div class="music-recommendsong-item">
         <div class="item-left">
-            <img :src="imgurl"/>
+            <img v-lazy="imgurl"/>
         </div>
         <div class="item-right">
             <h4 class="item-right-title">{{this.name}}</h4>

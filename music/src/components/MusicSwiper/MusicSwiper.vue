@@ -4,7 +4,7 @@
             <swiper-slide
                 v-for="sliderItem in slider"
                 :key="sliderItem.id">
-                <img :src="sliderItem.picUrl" class="slider-item"/>
+                <img :src="sliderItem.picUrl" @load="imgOnLoad" class="slider-item"/>
             </swiper-slide>
             <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
         </swiper>
@@ -45,6 +45,20 @@ export default {
                         return `<span class="${className} swiper-pagination-bullet-custom"></span>`
                     }
                 }
+            },
+
+            isFirst: false
+        }
+    },
+
+    methods: {
+        /**
+         * 图片加载完成
+         */
+        imgOnLoad () {
+            if (!this.isFirst) {
+                this.isFirst = true
+                this.$emit('img-load')
             }
         }
     }

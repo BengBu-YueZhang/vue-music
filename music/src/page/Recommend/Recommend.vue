@@ -1,10 +1,16 @@
 <template>
-    <section class="recommend-wrappper">
-        <music-swiper
-            :slider="this.slider"
-        ></music-swiper>
-        <MusicTitle title="热门歌单推荐"/>
-        <MusicRecommendSong :song-list="songList"/>
+    <section>
+        <music-scroll :scroll-data="songList" ref="iscoll" class="recommend-wrappper">
+            <div class="scroll-view">
+                <music-swiper
+                    @img-load="$refs.iscoll.refresh()"
+                    :slider="this.slider"
+                ></music-swiper>
+                <MusicTitle title="热门歌单推荐"/>
+                <MusicRecommendSong
+                    :song-list="songList"/>
+            </div> 
+        </music-scroll>  
     </section>
 </template>
 
@@ -69,4 +75,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.recommend-wrappper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 88px;
+    overflow: hidden;
+}
+
+.scroll-view {
+    width: 100%;
+    height: auto;
+}
 </style>

@@ -26,10 +26,6 @@ export default {
             }
         }
     },
-
-    created () {
-        console.log(this.songList)
-    }
 }
 </script>
 
