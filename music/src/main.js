@@ -8,8 +8,6 @@ import Fastclick from 'fastclick'
 
 Vue.config.productionTip = false
 
-console.log(store)
-
 Fastclick.attach(document.body)
 
 /* eslint-disable no-new */

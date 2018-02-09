@@ -1,8 +1,8 @@
 <template>
     <section class="recommend-wrappper">
-        <music-swiper :slider="this.slider">
-            
-        </music-swiper>
+        <music-swiper
+            :slider="this.slider"
+        ></music-swiper>
     </section>
 </template>
 
