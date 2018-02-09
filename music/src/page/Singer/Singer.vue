@@ -4,9 +4,13 @@
             class="scroll-view-wrappper"
             :scroll-data="singerList"
             ref="iscoll">
-            <music-singer-main-list :singer-data="singerList"></music-singer-main-list>
+            <music-singer-main-list :singer-data="singerList">
+            </music-singer-main-list>
         </music-scroll>
-        <MusicSingerQuickList :singer-data="singerList"></MusicSingerQuickList>
+        <MusicSingerQuickList
+            @touch-start="touchStart"
+            :singer-data="singerList"
+        ></MusicSingerQuickList>
     </section>
 </template>
 
@@ -85,6 +89,14 @@ export default {
                 items: hostSinger
             })
             return newSingerList
+        },
+
+        /**
+         * 快速定位栏touchstart
+         * @param {Number} index 索引
+         */
+        touchStart (index) {
+            console.log(index)
         }
     }
 }

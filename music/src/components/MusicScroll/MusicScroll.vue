@@ -72,6 +72,20 @@ export default {
          */
         refresh () {
             this.iScroll && this.iScroll.refresh()
+        },
+
+        /**
+         * 滚动到指定位置
+         */
+        scrollTo (...rest) {
+            this.iScroll && this.iScroll.scrollTo(...rest)
+        },
+
+        /**
+         * 滚动到指定元素
+         */
+        scrollToElement (...rest) {
+            this.iScroll && this.iScroll.scrollToElement(...rest)
         }
     },
 

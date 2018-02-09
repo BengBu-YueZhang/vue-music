@@ -1,7 +1,7 @@
 <template>
     <div class="quick-list-wrapper">
-        <ul class="quick-list">
-            <li v-for="(quick, index) in singerData" :key="index">
+        <ul class="quick-list" @touchstart.prevent.stop="onTouchStart">
+            <li v-for="(quick, index) in singerData" :key="index" :data-index="index">
                 {{quick.key.slice(0, 1)}}
             </li>
         </ul>
@@ -9,6 +9,10 @@
 </template>
 
 <script>
+import { getDataAttribute } from './../../util/domAttribute'
+
+const HEIGHT = 18
+
 export default {
     props: {
         'singer-data': {
@@ -17,7 +21,32 @@ export default {
                 return []
             }
         }
-    }
+    },
+
+    created () {
+        this.touchInfo = {}
+    },
+
+    methods: {
+        /**
+         * 定位栏的touchstart事件
+         */
+        onTouchStart (ev) {
+            let target = ev.target
+            let index = 0
+            if (target.nodeName.toLowerCase() === 'li') {
+                index = getDataAttribute(ev.target, 'index')
+                this.$emit('touch-start', index)
+            }
+        },
+
+        /**
+         * 定位栏的touchmove事件
+         */
+        onTouchMove (ev) {
+
+        }
+    },
 }
 </script>
 

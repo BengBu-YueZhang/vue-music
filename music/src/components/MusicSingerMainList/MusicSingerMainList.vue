@@ -2,7 +2,8 @@
     <ul class="singer-list-wrapper">
         <li v-for="(singerItem, index) in singerData"
             :key="index">
-            <music-singer-main-list-title :title="singerItem.key"></music-singer-main-list-title>
+            <music-singer-main-list-title :title="singerItem.key">
+            </music-singer-main-list-title>
             <ul class="singer-content">
                 <music-singer-main-list-content
                     v-for="singerContent in singerItem.items"
