@@ -1,6 +1,6 @@
 <template>
     <section>
-        <music-scroll :scroll-data="songList" ref="iscoll" class="recommend-wrappper">
+        <music-scroll :scroll-data="songList" ref="iscoll" class="scroll-view-wrappper">
             <div class="scroll-view">
                 <music-swiper
                     @img-load="$refs.iscoll.refresh()"
@@ -9,8 +9,11 @@
                 <MusicTitle title="热门歌单推荐"/>
                 <MusicRecommendSong
                     :song-list="songList"/>
-            </div> 
-        </music-scroll>  
+            </div>
+            <div class="loading-wrapper">
+                <music-loading v-if="!songList.length"></music-loading>
+            </div>
+        </music-scroll>
     </section>
 </template>
 
@@ -20,13 +23,15 @@ import MusicSwiper from './../../components/MusicSwiper/MusicSwiper'
 import MusicRecommendSong from './../../components/MusicRecommendSong/MusicRecommendSong'
 import MusicTitle from './../../components/MusicTitle/MusicTitle'
 import MusicScroll from './../../components/MusicScroll/MusicScroll'
+import MusicLoading from './../../components/MusicLoading/MusicLoading'
 
 export default {
     components: {
         MusicSwiper,
         MusicRecommendSong,
         MusicTitle,
-        MusicScroll
+        MusicScroll,
+        MusicLoading
     },
 
     data () {
@@ -75,7 +80,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.recommend-wrappper {
+.scroll-view-wrappper {
     position: absolute;
     left: 0;
     right: 0;
@@ -87,5 +92,13 @@ export default {
 .scroll-view {
     width: 100%;
     height: auto;
+}
+
+.loading-wrapper {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
 }
 </style>
