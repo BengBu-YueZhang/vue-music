@@ -1,6 +1,8 @@
 <template>
     <div class="quick-list-wrapper">
-        <ul class="quick-list" @touchstart.prevent.stop="onTouchStart">
+        <ul class="quick-list"
+            @touchstart.prevent.stop="onTouchStart"
+            @touchmove.prevent.stop="onTouchMove">
             <li v-for="(quick, index) in singerData" :key="index" :data-index="index">
                 {{quick.key.slice(0, 1)}}
             </li>
@@ -33,9 +35,10 @@ export default {
          */
         onTouchStart (ev) {
             let target = ev.target
-            let index = 0
-            if (target.nodeName.toLowerCase() === 'li') {
-                index = getDataAttribute(ev.target, 'index')
+            let index = getDataAttribute(ev.target, 'index')
+            this.touchInfo.pageY = ev.touches[0].pageY
+            this.touchInfo.index = index
+            if (target.nodeName.toLowerCase() === 'li') { 
                 this.$emit('touch-start', index)
             }
         },
@@ -44,7 +47,8 @@ export default {
          * 定位栏的touchmove事件
          */
         onTouchMove (ev) {
-
+            let distance = parseInt(this.touchInfo.index) + Math.floor((ev.touches[0].pageY - this.touchInfo.pageY) / HEIGHT)
+            this.$emit('touch-move', distance)
         }
     },
 }

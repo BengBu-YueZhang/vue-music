@@ -22,6 +22,7 @@
         </music-scroll>
         <MusicSingerQuickList
             @touch-start="touchStart"
+            @touch-move="touchMove"
             :singer-data="singerList"
         ></MusicSingerQuickList>
     </section>
@@ -109,6 +110,14 @@ export default {
          * @param {Number} index 索引
          */
         touchStart (index) {
+            this.$refs.iscoll.scrollToElement(this.$refs.singerList[index], 0)
+        },
+
+        /**
+         * 快速定位栏touchmove
+         * @param {Number} index 索引
+         */
+        touchMove (index) {
             this.$refs.iscoll.scrollToElement(this.$refs.singerList[index], 0)
         }
     }
