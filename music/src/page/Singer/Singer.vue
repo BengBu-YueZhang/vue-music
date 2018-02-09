@@ -91,6 +91,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.singer-wrappper {
+   position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    overflow: hidden; 
+}
+
 .scroll-view-wrappper {
     position: absolute;
     left: 0;
