@@ -64,8 +64,10 @@ export default {
             singerGroupHeight: [],
             // 当前滚动位置的区间的索引
             currentIndex: 0,
-            // 歌手列表各个区块距离顶部的距离查
-            diff: 0
+            // 歌手列表各个区块距离顶部的距离差
+            diff: 0,
+            // 滚动距离
+            scrollY: 0
         }
     },
 
@@ -77,6 +79,9 @@ export default {
 
     computed: {
         fixedTitle () {
+            if (this.scrollY > -5) {
+                return ''
+            }
             if (this.singerList[this.currentIndex]) {
                 return this.singerList[this.currentIndex].key
             }
@@ -93,10 +98,12 @@ export default {
             deep: true
         },
 
-        diff (val) { 
-            val < 30 ? this.fixedTop = val - 30 : this.fixedTop = val
-            if (this.fixedTop === val) return
-            this.$refs.fixedTitle.style.transform = `translate3d(0, ${this.fixedTop}px, 0.01px)`
+        diff (val) {
+            let fixedTop = 0
+            val <= 30 ? fixedTop = val - 30 : fixedTop = 0
+            if (this.fixedTop === val) return   
+            this.$refs.fixedTitle.style.transform = `translate3d(0, ${fixedTop}px, 0.01px)`
+            this.fixedTop = fixedTop
         }
     },
 
@@ -183,6 +190,7 @@ export default {
          * @param {Number} posY y轴滚动距离
          */
         onScroll (posY) {
+            this.scrollY = posY
             if (posY >= 0) {
                 this.currentIndex = 0
                 return

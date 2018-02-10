@@ -1,17 +1,26 @@
 <template>
     <transition name="singerdetail">
         <section class="singer-detail-wrapper">
+            <music-song-list
+                :list="songList"
+                :bg="singer.imgurl"
+                :name="singer.name"
+            ></music-song-list>
         </section>
-    </transition>
-    
+    </transition> 
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
 import { createSong } from './../../model/Song'
 import { OK } from './../../config/index'
+import  MusicSongList from './../../components/MusicSongList/MusicSongList'
 
 export default {
+    components: {
+        MusicSongList
+    },
+
     data () {
         return {
             songList: []
@@ -37,7 +46,6 @@ export default {
          * 获取歌手详情列表数据
          */
         getSingerDetail () {
-            console.log(this.singer)
             if (!this.singer.id) {
                 this.$router.push('/singer')
                 return
