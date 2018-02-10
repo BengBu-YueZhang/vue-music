@@ -5,6 +5,7 @@ const Ranking = () => import('./../page/Ranking/Ranking.vue')
 const Recommend = () => import('./../page/Recommend/Recommend.vue')
 const Search = () => import('./../page/Search/Search.vue')
 const Singer = () => import('./../page/Singer/Singer.vue')
+const SingerDetail = () => import('./../page/SingerDetail/SingerDetail.vue')
 
 Vue.use(Router)
 
@@ -27,7 +28,14 @@ export default new Router({
         {
             path: '/singer',
             name: 'Singer',
-            component: Singer
+            component: Singer,
+            children: [
+                {
+                    path: '/singer/:id',
+                    name: 'SingerDetail',
+                    component: SingerDetail
+                }
+            ]
         },
         {
             path: '/ranking',

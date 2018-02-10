@@ -32,6 +32,8 @@
         <h3 class="singer-title singer-fixed" v-if="fixedTitle" ref="fixedTitle">
             {{fixedTitle}}
         </h3>
+        <!-- 子路由:歌手详情页 -->
+        <router-view/>
     </section>
 </template>
 
