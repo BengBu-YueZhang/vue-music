@@ -1,3 +1,5 @@
+import { getSingerDetailAjax } from './../../api/singerDetail'
+
 export default {
     namespaced: true,
     state: {
@@ -14,8 +16,16 @@ export default {
          * 设置歌手信息
          * @param {} singer 
          */
-        async setSinger ({commit}, singer) {
+        async SetSinger ({commit}, singer) {
             commit('SET_SINGER', singer)
+        },
+
+        /**
+         * 获取歌手详情列表
+         */
+        async GetSingerDetailAjax ({state}) {
+            const singerDetail = await getSingerDetailAjax(state.singer.id)
+            return singerDetail
         }
     }
 }

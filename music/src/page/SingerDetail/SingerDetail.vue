@@ -7,7 +7,46 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+
 export default {
+    data () {
+        return {
+
+        }
+    },
+
+    created () {
+        this.getSingerDetail()
+    },
+
+    computed: {
+        ...mapState('singerDetail', [
+            'singer'
+        ])
+    },
+
+    methods: {
+        ...mapActions('singerDetail', [
+            'GetSingerDetailAjax'
+        ]),
+
+        /**
+         * 获取歌手详情列表数据
+         */
+        getSingerDetail () {
+            console.log(this.singer)
+            if (!this.singer.id) {
+                this.$router.push('/singer')
+                return
+            }
+            this.GetSingerDetailAjax().then(res => {
+                console.log(res)
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+    }
 }
 </script>
 

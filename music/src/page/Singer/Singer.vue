@@ -15,7 +15,8 @@
                     <ul class="singer-content">
                         <li class="singer-content-item"
                             v-for="singerContent in singerItem.items"
-                            :key="singerContent.id">
+                            :key="singerContent.id"
+                            @click="handleSingerClick(singerContent)">
                             <img v-lazy="singerContent.imgurl">
                             <span>{{singerContent.name}}</span>
                         </li>
@@ -24,8 +25,8 @@
             </ul>
         </music-scroll>
         <MusicSingerQuickList
-            @touch-start="touchStart"
-            @touch-move="touchMove"
+            @touch-start="handleTouchStart"
+            @touch-move="handletouchMove"
             :singer-data="singerList"
             :current-index="currentIndex"
         ></MusicSingerQuickList>
@@ -104,6 +105,10 @@ export default {
             'GetSingerListAjax'
         ]),
 
+        ...mapActions('singerDetail', [
+            'SetSinger'
+        ]),
+
         /**
          * 获取歌手列表
          */
@@ -153,7 +158,7 @@ export default {
          * 快速定位栏touchstart
          * @param {Number} index 索引
          */
-        touchStart (index) {
+        handleTouchStart (index) {
             this.$refs.iscoll.scrollToElement(this.$refs.singerList[index], 0)
             this.currentIndex = parseInt(index, 10)
         },
@@ -162,7 +167,7 @@ export default {
          * 快速定位栏touchmove
          * @param {Number} index 索引
          */
-        touchMove (index) {
+        handletouchMove (index) {
             this.$refs.iscoll.scrollToElement(this.$refs.singerList[index], 0)
             index = parseInt(index)
             if (index >= this.singerGroupHeight.length - 2) {
@@ -207,6 +212,15 @@ export default {
                 allHeight += dom.clientHeight
                 this.singerGroupHeight.push(allHeight)
             })
+        },
+
+        /**
+         * 点击歌手
+         * @param {Singer} singer 歌手信息
+         */
+        handleSingerClick (singer) {
+            this.SetSinger(singer)
+            this.$router.push(`/singer/${singer.id}`)
         }
     }
 }
