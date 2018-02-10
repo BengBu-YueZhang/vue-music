@@ -29,6 +29,9 @@
             :singer-data="singerList"
             :current-index="currentIndex"
         ></MusicSingerQuickList>
+        <h3 class="singer-title singer-fixed" v-if="fixedTitle">
+            {{fixedTitle}}
+        </h3>
     </section>
 </template>
 
@@ -57,12 +60,20 @@ export default {
             // 歌手列表各个区块距离顶部的距离集合
             singerGroupHeight: [],
             // 当前滚动位置的区间的索引
-            currentIndex: 0
+            currentIndex: 0,
         }
     },
 
     created () {
         this.getSingerList()
+    },
+
+    computed: {
+        fixedTitle () {
+            if (this.singerList[this.currentIndex] && this.currentIndex > 0) {
+                return this.singerList[this.currentIndex].key
+            }
+        }
     },
 
     watch: {
@@ -192,11 +203,11 @@ export default {
 @import './../../common/css/variable.less';
 
 .singer-wrappper {
-   position: absolute;
+    position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    top: 0;
+    top: 88px;
     overflow: hidden; 
 }
 
@@ -205,7 +216,7 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    top: 88px;
+    top: 0;
     overflow: hidden;
 }
 
@@ -247,5 +258,11 @@ export default {
         font-size: @font-size-medium;
         color: @color-text-l;
     }
+}
+
+.singer-fixed {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 </style>

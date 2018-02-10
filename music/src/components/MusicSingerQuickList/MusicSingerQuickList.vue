@@ -76,7 +76,7 @@ export default {
     width: 20px;
     height: auto;
     text-align: center; 
-    transform: translateY(-40%);
+    transform: translateY(-50%);
     background-color: @color-background-d;
     border-radius: 10px;
     color: @color-text-l;
