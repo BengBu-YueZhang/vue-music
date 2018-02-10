@@ -30,7 +30,7 @@
             :singer-data="singerList"
             :current-index="currentIndex"
         ></MusicSingerQuickList>
-        <h3 class="singer-title singer-fixed" v-if="fixedTitle" ref="fixedTitle">
+        <h3 class="singer-title singer-fixed" v-show="fixedTitle" ref="fixedTitle">
             {{fixedTitle}}
         </h3>
         <!-- 子路由:歌手详情页 -->
@@ -257,8 +257,6 @@ export default {
         }
     }
 }
-
-
 
 .singer-title {
     width: 100%;
