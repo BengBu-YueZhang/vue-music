@@ -104,45 +104,41 @@ export default {
     right: 0;
     bottom: 0;
     overflow: hidden;
-}
-
-.song-list {
-    width: 100%;
-    height: auto;
-    padding: 20px 30px;
-    list-style: none;
-}
-
-.song-list-item {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    height: 64px;
-}
-
-.song-ranking {
-    font-size: @font-size-large;
-    color: @color-theme;
-    margin-right: 30px;
-}
-
-.song-info {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-    h5 {
-        color: @color-text;
-        font-size: 100%;
-        font-weight: normal;
-        line-height: 20px;
-    }
-    p {
-        margin-top: 4px;
-        font-size: 100%;
-        line-height: 20px;
-        color: @color-text-d;
+    .song-list {
+        width: 100%;
+        height: auto;
+        padding: 20px 30px;
+        list-style: none;
+        .song-list-item {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+            height: 64px;
+            .song-ranking {
+                font-size: @font-size-large;
+                color: @color-theme;
+                margin-right: 30px;
+            }
+            .song-info {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                flex-direction: column;
+                h5 {
+                    color: @color-text;
+                    font-size: 100%;
+                    font-weight: normal;
+                    line-height: 20px;
+                }
+                p {
+                    margin-top: 4px;
+                    font-size: 100%;
+                    line-height: 20px;
+                    color: @color-text-d;
+                }
+            }
+        }
     }
 }
 </style>

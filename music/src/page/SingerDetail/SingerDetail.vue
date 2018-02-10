@@ -71,12 +71,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import './../../common/css/variable.less';
-
-.singer-detail-wrapper {
-    
-}
-
 .singerdetail-enter-active, .singerdetail-leave-active {
   transition: all 750ms;
   opacity: 1;

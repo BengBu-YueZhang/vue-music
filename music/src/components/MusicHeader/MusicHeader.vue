@@ -24,20 +24,18 @@ export default {
     font-size: 0;
     background-color: @color-background;
     color: @color-theme;
-}
-
-.app-header-logo {
-    display: inline-block;
-    width: 34px;
-    height: 32px;
-    margin-right: 6px;
-    background: url('./../../common/imgae/default.png') no-repeat;
-    background-size: 34px 32px;
-}
-
-.app-header-title {
-    display: inline-block;
-    font-size: @font-size-large;
-    line-height: 44px;
+    .app-header-logo {
+        display: inline-block;
+        width: 34px;
+        height: 32px;
+        margin-right: 6px;
+        background: url('./../../common/imgae/default.png') no-repeat;
+        background-size: 34px 32px;
+    }
+    .app-header-title {
+        display: inline-block;
+        font-size: @font-size-large;
+        line-height: 44px;
+    }
 }
 </style>

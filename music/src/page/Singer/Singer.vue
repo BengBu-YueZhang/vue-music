@@ -244,26 +244,21 @@ export default {
     bottom: 0;
     top: 88px;
     overflow: hidden;
+    .scroll-view-wrappper {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        overflow: hidden;
+        .singer-list-wrapper {
+            width: 100%;
+            height: auto;
+        }
+    }
 }
 
-.scroll-view-wrappper {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    overflow: hidden;
-}
 
-.scroll-view {
-    width: 100%;
-    height: auto;
-}
-
-.singer-list-wrapper {
-    width: 100%;
-    height: auto;
-}
 
 .singer-title {
     width: 100%;

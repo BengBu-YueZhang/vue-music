@@ -30,25 +30,23 @@ export default {
     align-items: center;
     width: 100%;
     height: 44px;
-}
-
-.nav-item {
-    flex: 1;
-    font-size: @font-size-medium;
-    color: @color-text-l;
-    text-align: center;
-    text-decoration: none;
-    box-sizing: border-box;
-    line-height: 44px;
-}
-
-.router-link-active {
-    color: @color-theme;
-    span {
-        display: inline-block;
-        padding: 0 10px;
-        height: 44px;
-        border-bottom: 2px solid @color-theme;
+    .nav-item {
+        flex: 1;
+        font-size: @font-size-medium;
+        color: @color-text-l;
+        text-align: center;
+        text-decoration: none;
+        box-sizing: border-box;
+        line-height: 44px;
+    }
+    .router-link-active {
+        color: @color-theme;
+        span {
+            display: inline-block;
+            padding: 0 10px;
+            height: 44px;
+            border-bottom: 2px solid @color-theme;
+        }
     }
 }
 </style>
