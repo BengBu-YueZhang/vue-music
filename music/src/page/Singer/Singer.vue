@@ -34,13 +34,11 @@ import { OK } from './../../config/index'
 import Singer from './../../model/Singer'
 import { slice, uniq, map, sort, filter, compose, forEach} from 'ramda'
 import MusicSingerQuickList from './../../components/MusicSingerQuickList/MusicSingerQuickList'
-import MusicSingerMainList from './../../components/MusicSingerMainList/MusicSingerMainList'
 import MusicScroll from './../../components/MusicScroll/MusicScroll'
 
 export default {
     components: {
         MusicSingerQuickList,
-        MusicSingerMainList,
         MusicScroll
     },
 
@@ -118,6 +116,7 @@ export default {
          * @param {Number} index 索引
          */
         touchMove (index) {
+            console.log(index)
             this.$refs.iscoll.scrollToElement(this.$refs.singerList[index], 0)
         }
     }

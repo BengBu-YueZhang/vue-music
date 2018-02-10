@@ -47,8 +47,11 @@ export default {
          * 定位栏的touchmove事件
          */
         onTouchMove (ev) {
+            let target = ev.target
             let distance = parseInt(this.touchInfo.index) + Math.floor((ev.touches[0].pageY - this.touchInfo.pageY) / HEIGHT)
-            this.$emit('touch-move', distance)
+            if (target.nodeName.toLowerCase() === 'li') {
+                this.$emit('touch-move', distance)
+            }
         }
     },
 }
