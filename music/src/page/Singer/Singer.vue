@@ -91,14 +91,8 @@ export default {
         },
 
         diff (val) { 
-            if (val < 30) {
-                this.fixedTop = val - 30
-            } else {
-                this.fixedTop = val
-            }
-            if (this.fixedTop === val) {
-                return
-            } 
+            val < 30 ? this.fixedTop = val - 30 : this.fixedTop = val
+            if (this.fixedTop === val) return
             this.$refs.fixedTitle.style.transform = `translate3d(0, ${this.fixedTop}px, 0.01px)`
         }
     },
