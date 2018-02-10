@@ -1,12 +1,10 @@
 <template>
     <transition name="singerdetail">
-        <section class="singer-detail-wrapper">
-            <music-song-list
-                :list="songList"
-                :bg="singer.imgurl"
-                :name="singer.name"
-            ></music-song-list>
-        </section>
+        <music-song-list
+            :list="songList"
+            :bg="singer.imgurl"
+            :name="singer.name"
+        ></music-song-list>
     </transition> 
 </template>
 
@@ -76,13 +74,7 @@ export default {
 @import './../../common/css/variable.less';
 
 .singer-detail-wrapper {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 100;
-    background-color: @color-background;
+    
 }
 
 .singerdetail-enter-active, .singerdetail-leave-active {
