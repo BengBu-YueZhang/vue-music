@@ -8,11 +8,13 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import { createSong } from './../../model/Song'
+import { OK } from './../../config/index'
 
 export default {
     data () {
         return {
-
+            songList: []
         }
     },
 
@@ -41,9 +43,21 @@ export default {
                 return
             }
             this.GetSingerDetailAjax().then(res => {
-                console.log(res)
+                if (res.code !== OK) throw new Error(res.message)
+                this.songList = this.formattedSingerData(res.data.list)
+                console.log(this.songList)
             }).catch(err => {
                 console.log(err)
+            })
+        },
+
+        /**
+         * 格式化歌手详情数据
+         * @param {Array} data 歌曲列表
+         */
+        formattedSingerData (data) {
+            return data.map(item => {
+                return createSong(item.musicData)
             })
         }
     }
