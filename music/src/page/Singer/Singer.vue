@@ -29,7 +29,7 @@
             :singer-data="singerList"
             :current-index="currentIndex"
         ></MusicSingerQuickList>
-        <h3 class="singer-title singer-fixed" v-if="fixedTitle">
+        <h3 class="singer-title singer-fixed" v-if="fixedTitle" ref="fixedTitle">
             {{fixedTitle}}
         </h3>
     </section>
@@ -61,16 +61,20 @@ export default {
             singerGroupHeight: [],
             // 当前滚动位置的区间的索引
             currentIndex: 0,
+            // 歌手列表各个区块距离顶部的距离查
+            diff: 0
         }
     },
 
     created () {
         this.getSingerList()
+        // 标题距离顶部的距离
+        this.fixedTop = 0
     },
 
     computed: {
         fixedTitle () {
-            if (this.singerList[this.currentIndex] && this.currentIndex > 0) {
+            if (this.singerList[this.currentIndex]) {
                 return this.singerList[this.currentIndex].key
             }
         }
@@ -84,6 +88,18 @@ export default {
                 }, 30)
             },
             deep: true
+        },
+
+        diff (val) { 
+            if (val < 30) {
+                this.fixedTop = val - 30
+            } else {
+                this.fixedTop = val
+            }
+            if (this.fixedTop === val) {
+                return
+            } 
+            this.$refs.fixedTitle.style.transform = `translate3d(0, ${this.fixedTop}px, 0.01px)`
         }
     },
 
@@ -175,6 +191,7 @@ export default {
                     let downHeight = this.singerGroupHeight[i+1]
                     if (Math.abs(posY) >= topHeight && Math.abs(posY) < downHeight) {
                         this.currentIndex = i
+                        this.diff = downHeight - Math.abs(posY)
                         return
                     }
                 }
@@ -208,7 +225,7 @@ export default {
     right: 0;
     bottom: 0;
     top: 88px;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .scroll-view-wrappper {
@@ -264,5 +281,6 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
+    transform: translate3d(0, 0, 0.01)
 }
 </style>
