@@ -3,7 +3,11 @@
         <ul class="quick-list"
             @touchstart.prevent.stop="onTouchStart"
             @touchmove.prevent.stop="onTouchMove">
-            <li v-for="(quick, index) in singerData" :key="index" :data-index="index">
+            <li
+                v-for="(quick, index) in singerData"
+                :key="index"
+                :data-index="index"
+                :class="{'quick-list-item-active': index === currentIndex}">
                 {{quick.key.slice(0, 1)}}
             </li>
         </ul>
@@ -22,6 +26,11 @@ export default {
             default () {
                 return []
             }
+        },
+
+        'current-index': {
+            type: Number,
+            default: 0
         }
     },
 
@@ -77,6 +86,9 @@ export default {
         li {
             font-size: @font-size-small-s;
             padding: 3px 3px;
+        }
+        .quick-list-item-active {
+            color: @color-theme;
         }
     }
 }

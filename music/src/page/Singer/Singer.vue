@@ -3,6 +3,9 @@
         <music-scroll 
             class="scroll-view-wrappper"
             :scroll-data="singerList"
+            :on-scroll="isOnScroll"
+            :probe-type="probeType"
+            @onScroll="onScroll"
             ref="iscoll">
             <ul class="singer-list-wrapper">
                 <li v-for="(singerItem, index) in singerList"
@@ -24,6 +27,7 @@
             @touch-start="touchStart"
             @touch-move="touchMove"
             :singer-data="singerList"
+            :current-index="currentIndex"
         ></MusicSingerQuickList>
     </section>
 </template>
@@ -45,12 +49,31 @@ export default {
     data () {
         return {
             // 歌手列表
-            singerList: []
+            singerList: [],
+            // 是否监听better-scroll的滚动
+            isOnScroll: true,
+            // 是否实时监听
+            probeType: 3,
+            // 歌手列表各个区块距离顶部的距离集合
+            singerGroupHeight: [],
+            // 当前滚动位置的区间的索引
+            currentIndex: 0
         }
     },
 
     created () {
         this.getSingerList()
+    },
+
+    watch: {
+        'singerList': {
+            handler: function (val, oldVal) {
+                setTimeout(() => {
+                    this.getSingerGroupHeight()
+                }, 30)
+            },
+            deep: true
+        }
     },
 
     methods: {
@@ -109,6 +132,7 @@ export default {
          */
         touchStart (index) {
             this.$refs.iscoll.scrollToElement(this.$refs.singerList[index], 0)
+            this.currentIndex = parseInt(index, 10)
         },
 
         /**
@@ -116,8 +140,49 @@ export default {
          * @param {Number} index 索引
          */
         touchMove (index) {
-            console.log(index)
             this.$refs.iscoll.scrollToElement(this.$refs.singerList[index], 0)
+            index = parseInt(index)
+            if (index >= this.singerGroupHeight.length - 2) {
+                index = this.singerGroupHeight.length - 2
+            } else if (index <= 0) {
+                index = 0
+            }
+            this.currentIndex = index
+        },
+
+        /**
+         * 监听betterScroll的滚动
+         * @param {Number} posY y轴滚动距离
+         */
+        onScroll (posY) {
+            if (posY >= 0) {
+                this.currentIndex = 0
+                return
+            } else {
+                for (let i = 0; i < this.singerGroupHeight.length - 1; i++) {
+                    let topHeight = this.singerGroupHeight[i]
+                    let downHeight = this.singerGroupHeight[i+1]
+                    if (Math.abs(posY) >= topHeight && Math.abs(posY) < downHeight) {
+                        this.currentIndex = i
+                        return
+                    }
+                }
+                // 因为push了一个0，所以减去2
+                this.currentIndex = this.singerGroupHeight.length - 2
+                return
+            }
+        },
+
+        /**
+         * 计算歌手列表组的高度
+         */
+        getSingerGroupHeight () {
+            let allHeight = 0
+            this.singerGroupHeight.push(0)
+            this.$refs.singerList.forEach(dom => {
+                allHeight += dom.clientHeight
+                this.singerGroupHeight.push(allHeight)
+            })
         }
     }
 }

@@ -24,6 +24,13 @@ export default {
             default () {
                 return null
             }
+        },
+
+        'on-scroll': {
+            type: Boolean,
+            default () {
+                return false
+            }
         }
     },
 
@@ -51,6 +58,12 @@ export default {
                 probeType: this.probeType,
                 click: this.click
             })
+            // 是否需要监听betterscroll
+            if (this.onScroll) {
+                this.iScroll.on('scroll', (position) => {
+                    this.$emit('onScroll', parseInt(position.y, 10))
+                })
+            }
         },
 
         /**
