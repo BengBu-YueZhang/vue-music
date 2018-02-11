@@ -7,9 +7,13 @@
         <header class="bg-header">
             <h4>{{this.name}}</h4>
         </header>
+        <div class="follow-bg"></div>
         <music-scroll
             class="scroll-view-wrapper"
             ref="scrollViewWrapper"
+            @onScroll="onScroll"
+            :on-scroll="isOnScroll"
+            :probe-type="probeType"
             :scroll-data="list">
             <ul class="song-list">
                 <li
@@ -56,16 +60,41 @@ export default {
         }
     },
 
+    data () {
+        return {
+            scrollY: 0,
+            probeType: 3,
+            isOnScroll: true
+        }
+    },
+
     mounted () {
         setTimeout(() => {
             this.$refs.scrollViewWrapper.$el.style.top = `${this.$refs.Bg.clientHeight}px`
         }, 30)
+    },
+
+    watch: {
+        scrollY (val, oldVal) {
+            console.log(val)
+        }
+    },
+
+    methods: {
+        /**
+         * 监听betterscroll滚动
+         * @param {Object} position 滚动位置
+         */
+        onScroll (position) {
+            this.scrollY = position.y
+        }
     }
 }
 </script>
 
 <style lang="less" scoped>
 @import './../../common/css/variable.less';
+
 .music-song-wrapper {
     position: fixed;
     left: 0;
@@ -99,6 +128,13 @@ export default {
     }
 }
 
+.follow-bg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: @color-background;
+}
+
 .scroll-view-wrapper {
     position: absolute;
     left: 0;
@@ -117,15 +153,15 @@ export default {
             width: 100%;
             height: 64px;
             .song-ranking {
+                flex: 0 0 25px;
+                width: 25px;
                 font-size: @font-size-large;
                 color: @color-theme;
                 margin-right: 30px;
             }
             .song-info {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                flex-direction: column;
+                flex: 1;
+                overflow: hidden;
                 h5 {
                     color: @color-text;
                     font-size: 100%;
@@ -137,6 +173,9 @@ export default {
                     font-size: 100%;
                     line-height: 20px;
                     color: @color-text-d;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
                 }
             }
         }
