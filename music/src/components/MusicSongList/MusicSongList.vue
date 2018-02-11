@@ -7,11 +7,11 @@
         <header class="bg-header">
             <h4>{{this.name}}</h4>
         </header>
-        <div class="follow-bg"></div>
+        <div class="follow-bg" ref="followBg"></div>
         <music-scroll
             class="scroll-view-wrapper"
             ref="scrollViewWrapper"
-            @onScroll="onScroll"
+            @onScroll="onScrollY"
             :on-scroll="isOnScroll"
             :probe-type="probeType"
             :scroll-data="list">
@@ -62,31 +62,59 @@ export default {
 
     data () {
         return {
+            // y轴实时滚动位置
             scrollY: 0,
             probeType: 3,
-            isOnScroll: true
+            isOnScroll: true,
+            // 背景图片的高度
+            bgImageHeight: 0,
+            // 最大滚动距离
+            maxScrollY: 0
         }
     },
 
     mounted () {
         setTimeout(() => {
-            this.$refs.scrollViewWrapper.$el.style.top = `${this.$refs.Bg.clientHeight}px`
+            this.bgImageHeight = this.$refs.Bg.clientHeight
+            this.maxScrollY = this.bgImageHeight - 40
+            this.$refs.scrollViewWrapper.$el.style.top = `${this.bgImageHeight}px`
         }, 30)
     },
 
     watch: {
         scrollY (val, oldVal) {
-            console.log(val)
+            let dif = 0
+            let scale = 1 + Math.abs(val / this.bgImageHeight)
+            Math.abs(val) > this.maxScrollY ? dif = -this.maxScrollY : dif = val
+            this.$refs.followBg.style['transform'] = `translate3d(0, ${dif}px, 0.01px)`
+            this.$refs.followBg.style['webkitTransform'] = `translate3d(0, ${dif}px, 0.01px)`
+            if (val > 20) {
+                this.$refs.Bg.style['transform'] = `scale(${scale})`
+                this.$refs.Bg.style['webkitTransform'] = `scale(${scale})`
+                this.$refs.Bg.style['filter'] = `blur(${scale - 1}px)`
+                this.$refs.Bg.style['webkitFilter'] = `blur(${scale - 1}px)`
+                this.$refs.Bg.style.zIndex = 50
+            }
+            if (Math.abs(val) >= this.maxScrollY && val < 0) {
+                this.$refs.Bg.style.height = '40px'
+                this.$refs.Bg.style.paddingTop = 0
+                this.$refs.Bg.style.zIndex = 50
+            } else if (Math.abs(val) < this.maxScrollY && val < 0) {
+                this.$refs.Bg.style.height = 0
+                this.$refs.Bg.style.paddingTop = '70%'
+                this.$refs.Bg.style.zIndex = 0
+            }
+            
         }
     },
 
     methods: {
         /**
          * 监听betterscroll滚动
-         * @param {Object} position 滚动位置
+         * @param {Number} y y轴滚动位置
          */
-        onScroll (position) {
-            this.scrollY = position.y
+        onScrollY (y) {
+            this.scrollY = y
         }
     }
 }
@@ -110,7 +138,8 @@ export default {
     width: 100%;
     height: 0;
     padding-top: 70%;
-    filter: brightness(30%);
+    filter: brightness(90%);
+    transform-origin: top;
 }
 
 .bg-header {
@@ -120,6 +149,7 @@ export default {
     text-align: center;
     left: 0;
     top: 0;
+    z-index: 99;
     h4 {
         font-weight: 500;
         line-height: 40px;
@@ -140,7 +170,6 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
-    overflow: hidden;
     .song-list {
         width: 100%;
         height: auto;
@@ -166,7 +195,7 @@ export default {
                     color: @color-text;
                     font-size: 100%;
                     font-weight: normal;
-                    line-height: 20px;
+                    line-height: 20px; 
                 }
                 p {
                     margin-top: 4px;
