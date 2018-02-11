@@ -77,6 +77,7 @@ export default {
 }
 
 .bg {
+    position: relative;
     width: 100%;
     height: 0;
     padding-top: 70%;
