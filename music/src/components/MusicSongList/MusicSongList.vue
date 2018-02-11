@@ -88,11 +88,9 @@ export default {
             Math.abs(val) > this.maxScrollY ? dif = -this.maxScrollY : dif = val
             this.$refs.followBg.style['transform'] = `translate3d(0, ${dif}px, 0.01px)`
             this.$refs.followBg.style['webkitTransform'] = `translate3d(0, ${dif}px, 0.01px)`
-            if (val > 20) {
+            if (val > 10) {
                 this.$refs.Bg.style['transform'] = `scale(${scale})`
                 this.$refs.Bg.style['webkitTransform'] = `scale(${scale})`
-                this.$refs.Bg.style['filter'] = `blur(${scale - 1}px)`
-                this.$refs.Bg.style['webkitFilter'] = `blur(${scale - 1}px)`
                 this.$refs.Bg.style.zIndex = 50
             }
             if (Math.abs(val) >= this.maxScrollY && val < 0) {
