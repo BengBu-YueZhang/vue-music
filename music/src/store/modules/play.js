@@ -47,5 +47,17 @@ export default {
         }
     },
     actions: {
+        playSongList ({ commit, state }, {index, song, list}) {
+            commit('SET_PLAYING', true)
+            commit('SET_FULL_SCREEN', true)
+            commit('SER_PLAY_LIST', list)
+            commit('SET_SEQUEN_LIST', list)
+            commit('SET_CURRENT_INDEX', index)
+            console.log(song)
+        },
+
+        playFullScreen ({ commit }) {
+            commit('SET_FULL_SCREEN', true)
+        }
     }
 }

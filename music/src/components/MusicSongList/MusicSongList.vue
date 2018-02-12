@@ -20,8 +20,8 @@
                     v-for="(songItem, index) in list"
                     :key="songItem.id"
                     :index="index"
-                    :name="songItem.name"
-                    :album="songItem.album"
+                    :song="songItem"
+                    @play-song="playSong"
                 ></music-song-entry>
             </ul>
         </music-scroll>
@@ -31,6 +31,7 @@
 <script>
 import MusicScroll from './../MusicScroll/MusicScroll'
 import MusicSongEntry from './../MusicSongEntry/MusicSongEntry'
+import { mapActions } from 'vuex'
 
 export default {
     components: {
@@ -107,12 +108,24 @@ export default {
     },
 
     methods: {
+        ...mapActions('play', [
+            'playSongList'
+        ]),
+
         /**
          * 监听betterscroll滚动
          * @param {Number} y y轴滚动位置
          */
         onScrollY (y) {
             this.scrollY = y
+        },
+
+        /**
+         * 播放音乐
+         * @param {Object} info 歌曲信息
+         */
+        playSong (info) {
+           this.playSongList({list: this.list, ...info}) 
         }
     }
 }

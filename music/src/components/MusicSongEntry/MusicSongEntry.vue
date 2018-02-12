@@ -1,12 +1,13 @@
 <template>
     <li
+        @click="handleSongEntryClick(index, song)"
         class="song-list-item">
         <div class="song-ranking" style="display: none">
             {{this.index}}
         </div>
         <div class="song-info">
-            <h5 class="song-name">{{this.name}}</h5>
-            <p class="song-album">{{this.name}}·{{this.album}}</p>
+            <h5 class="song-name">{{song.name}}</h5>
+            <p class="song-album">{{song.name}}·{{song.album}}</p>
         </div>
     </li>
 </template>
@@ -14,19 +15,30 @@
 <script>
 export default {
     props: {
-        'album': {
-            type: String,
-            default: ''
+        'song': {
+            type: Object,
+            default () {
+                return {}
+            }
         },
 
-        'name': {
-            type: String,
-            default: ''
-        },
-
-        index: {
+        'index': {
             type: [Number, String],
             default: 0
+        }
+    },
+
+    methods: {
+        /**
+         * 歌曲列表点击
+         * @param {Number} index 歌曲索引
+         * @param {Object} song 歌曲信息
+         */
+        handleSongEntryClick (index, song) {
+            this.$emit('play-song', {
+                index,
+                song
+            })
         }
     }
 }
