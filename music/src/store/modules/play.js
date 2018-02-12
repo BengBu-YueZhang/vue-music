@@ -1,3 +1,5 @@
+import { playMode } from './../../config/index'
+
 export default {
     namespaced: true,
     state: {
@@ -13,7 +15,7 @@ export default {
         sequenlist: [],
         // 播放顺序
         mode: playMode.sequence,
-        // 当前播放歌曲的缩引
+        // 当前播放歌曲的索引
         currentIndex: 0
     },
     getters: {

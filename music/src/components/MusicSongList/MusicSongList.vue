@@ -16,18 +16,13 @@
             :probe-type="probeType"
             :scroll-data="list">
             <ul class="song-list">
-                <li
+                <music-song-entry
                     v-for="(songItem, index) in list"
                     :key="songItem.id"
-                    class="song-list-item">
-                    <div class="song-ranking" style="display: none">
-                        {{index}}
-                    </div>
-                    <div class="song-info">
-                        <h5 class="song-name">{{songItem.name}}</h5>
-                        <p class="song-album">{{songItem.name}}·{{songItem.album}}</p>
-                    </div>
-                </li>
+                    :index="index"
+                    :name="songItem.name"
+                    :album="songItem.album"
+                ></music-song-entry>
             </ul>
         </music-scroll>
     </div>
@@ -35,10 +30,12 @@
 
 <script>
 import MusicScroll from './../MusicScroll/MusicScroll'
+import MusicSongEntry from './../MusicSongEntry/MusicSongEntry'
 
 export default {
     components: {
-        MusicScroll
+        MusicScroll,
+        MusicSongEntry
     },
     
     props: {

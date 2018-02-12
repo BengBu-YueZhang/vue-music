@@ -1,14 +1,37 @@
 <template>
-    <section class="autio-wrapper">
-        <div class="noraml-aution-wrapper">
+    <section class="autio-wrapper" v-show="playlist.length > 0">
+        <div class="noraml-aution-wrapper" v-show="fullScreen">
         </div>
-        <div class="mini-aution-wrapper">
+        <div class="mini-aution-wrapper" v-show="!fullScreen">
         </div>
     </section>
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
+
 export default {
+    computed: {
+        ...mapState('play', [
+            'singer',
+            'playing',
+            'fullScreen',
+            'playlist',
+            'sequenlist',
+            'mode',
+            'currentIndex'
+        ]),
+
+        ...mapGetters('play', [
+            'currentSong'
+        ])
+    },
+
+    methods: {
+        ...mapActions('play', [
+
+        ])
+    }
 }
 </script>
 
