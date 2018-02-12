@@ -4,6 +4,7 @@ import createLogger from 'vuex/dist/logger'
 import recommend from './modules/recommend'
 import singer from './modules/singer'
 import singerDetail from './modules/singerDetail'
+import play from './modules/play'
 
 Vue.use(Vuex)
 
@@ -13,7 +14,8 @@ export default new Vuex.Store({
     modules: {
         recommend,
         singer,
-        singerDetail
+        singerDetail,
+        play
     },
     strict: debug,
     // 类似redux的中间件

@@ -5,19 +5,22 @@
     <keep-alive>
       <router-view/>
     </keep-alive>
+    <music-play></music-play>
   </div>
 </template>
 
 <script>
 import MusicHeader from './components/MusicHeader/MusicHeader'
 import MusicNav from './components/MusicNav/MusicNav'
+import MusicPlay from './components/MusicPlay/MusicPlay'
 
 export default {
   name: 'App',
   
   components: {
     MusicHeader,
-    MusicNav
+    MusicNav,
+    MusicPlay
   }
 }
 </script>
