@@ -88,9 +88,12 @@ export default {
             Math.abs(val) > this.maxScrollY ? dif = -this.maxScrollY : dif = val
             this.$refs.followBg.style['transform'] = `translate3d(0, ${dif}px, 0.01px)`
             this.$refs.followBg.style['webkitTransform'] = `translate3d(0, ${dif}px, 0.01px)`
-            if (val > 10) {
+            this.$refs.Bg.style['filter'] = `blur(${0}px)`
+            if (val >= 0) {
                 this.$refs.Bg.style['transform'] = `scale(${scale})`
                 this.$refs.Bg.style['webkitTransform'] = `scale(${scale})`
+                this.$refs.Bg.style['filter'] = `blur(${scale - 1}px)`
+                this.$refs.Bg.style['weblitFilter'] = `blur(${scale - 1}px)`
                 this.$refs.Bg.style.zIndex = 50
             }
             if (Math.abs(val) >= this.maxScrollY && val < 0) {
@@ -136,7 +139,7 @@ export default {
     width: 100%;
     height: 0;
     padding-top: 70%;
-    filter: brightness(90%);
+    filter: blur(0px);
     transform-origin: top;
 }
 
