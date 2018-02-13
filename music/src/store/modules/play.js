@@ -56,9 +56,8 @@ export default {
             console.log(song)
         },
 
-        playFullScreen ({ commit }, flag) {
-            console.log(flag)
-            // commit('SET_FULL_SCREEN', flag)
+        isFullScreen ({ commit }, flag) {
+            commit('SET_FULL_SCREEN', flag)
         }
     }
 }

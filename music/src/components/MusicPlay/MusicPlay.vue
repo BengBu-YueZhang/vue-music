@@ -1,34 +1,56 @@
 <template>
     <section class="autio-wrapper" v-if="playlist.length > 0">
-        <div class="noraml-aution-wrapper" v-show="fullScreen">
-            <div class="noraml-aution-backgrond">
-                <img width="100%" height="100%" :src="currentSong.image"/>
-            </div>
-            <div class="noraml-aution-header">
-                <h1>{{this.currentSong.name}}</h1>
-                <h2>{{this.currentSong.album}}</h2>
-                <div class="back" @click="playMini">
-                    <i class="iconfont icon-moreunfold"></i>
+        <transition name="nmraml">
+            <div class="noraml-aution-wrapper" v-show="fullScreen">
+                <div class="noraml-aution-backgrond">
+                    <img width="100%" height="100%" :src="currentSong.image"/>
                 </div>
-            </div>
-            <div class="noraml-aution-cd">
-                <div class="noraml-aution-cd-left">
-                    <div class="cd">
-                        <div class="cd-play">
-                            <img :src="currentSong.image"/>
+                <transition name="header">
+                    <div class="noraml-aution-header" v-show="fullScreen">
+                        <h1>{{this.currentSong.name}}</h1>
+                        <h2>{{this.currentSong.album}}</h2>
+                        <div class="back" @click="isFullScreen(false)">
+                            <i class="iconfont icon-moreunfold"></i>
                         </div>
                     </div>
-                    <div class="playing-lyric">
+                </transition>
+                <div class="noraml-aution-cd">
+                    <div class="noraml-aution-cd-left">
+                        <div class="cd">
+                            <div class="cd-play">
+                                <img :src="currentSong.image"/>
+                            </div>
+                        </div>
+                        <div class="playing-lyric">
+                        </div>
                     </div>
+                    <div class="noraml-aution-cd-right"></div>
                 </div>
-                <div class="noraml-aution-cd-right"></div>
+                <transition name="control">
+                    <div class="noraml-aution-control" v-show="fullScreen">
+                        <div class="noraml-aution-control-dot"></div>
+                        <div class="noraml-aution-control-progressbar"></div>
+                        <div class="noraml-aution-control-button">
+                            <div class="noraml-aution-control-button-left noraml-aution-control-button-icon">
+                                <i class="iconfont icon-danquxunhuan"></i>
+                            </div>
+                            <div class="noraml-aution-control-button-left noraml-aution-control-button-icon">
+                                <i class="iconfont icon-back"></i>
+                            </div>
+                            <div class="noraml-aution-control-button-center noraml-aution-control-button-icon">
+                                <i class="iconfont icon-zanting"></i>
+                            </div>
+                            <div class="noraml-aution-control-button-right noraml-aution-control-button-icon">
+                                <i class="iconfont icon-more"></i>
+                            </div>
+                            <div class="noraml-aution-control-button-right noraml-aution-control-button-icon">
+                                <i class="iconfont icon-aixin"></i>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
             </div>
-            <div class="noraml-aution-control">
-                <div class="noraml-aution-control-dot"></div>
-                <div class="noraml-aution-control-progressbar"></div>
-                <div class="noraml-aution-control-button"></div>
-            </div>
-        </div>
+        </transition>
         <div class="mini-aution-wrapper" v-show="!fullScreen">
         </div>
     </section>
@@ -56,23 +78,9 @@ export default {
     
     methods: {
         ...mapActions('play', [
-            'playFullScreen'
+            'playFullScreen',
+            'isFullScreen'
         ]),
-
-        /**
-         * 返回上一层
-         */
-        playMini () {
-            console.log(1)
-            this.playFullScreen(false)
-        },
-
-        /**
-         * 全屏播放
-         */
-        playFullScreen () {
-            this.playFullScreen(true)
-        }
     }
 }
 </script>
@@ -171,6 +179,46 @@ export default {
             }
         }
     }
+    .noraml-aution-control {
+        position: absolute;
+        bottom: 50px;
+        width: 100%;
+        .noraml-aution-control-dot {
+            text-align: center;
+            font-size: 0;
+        }
+        .noraml-aution-control-progressbar {
+            display: flex;
+            align-items: center;
+            width: 80%;
+            margin: 0 auto;
+            padding: 10px 0;
+        }
+        .noraml-aution-control-button {
+            display: flex;
+            align-items: center;
+            .noraml-aution-control-button-icon {
+                flex: 1;
+            }
+            .noraml-aution-control-button-left {
+                text-align: right;
+            }
+            .noraml-aution-control-button-center {
+                padding: 0 20px;
+                text-align: center;
+                i {
+                    font-size: 40px;
+                }
+            }
+            .noraml-aution-control-button-right {
+                text-align: left;
+            }
+            i {
+                color: @color-theme;
+                font-size: 28px;
+            }
+        }
+    }
 }
 
 .mini-aution-wrapper {
@@ -181,6 +229,31 @@ export default {
     width: 100%;
     height: 60px;
     background-color: @color-highlight-background;
+}
+
+/* 动画样式 */
+.nmraml-enter-active, .nmraml-leave-active {
+    transition: all 500ms;
+    opacity: 1;
+}
+.nmraml-enter, .nmraml-leave-to {
+    opacity: 0.5;
+}
+
+.header-enter-active, .header-leave-active {
+    transition: all 500ms cubic-bezier(0.86, 0.18, 0.82, 1.32);
+    transform: translateY(0)
+}
+.header-enter, .header-leave-to {
+    transform: translateY(-100px)
+}
+
+.control-enter-active, .control-leave-active {
+    transition: all 500ms cubic-bezier(0.86, 0.18, 0.82, 1.32);
+    transform: translateY(0)
+}
+.control-enter, .control-leave-to {
+    transform: translateY(100px)
 }
 </style>
 
