@@ -45,11 +45,13 @@ import Singer from './../../model/Singer'
 import { slice, uniq, map, sort, filter, compose, forEach} from 'ramda'
 import MusicSingerQuickList from './../../components/MusicSingerQuickList/MusicSingerQuickList'
 import MusicScroll from './../../components/MusicScroll/MusicScroll'
+import MusicSingerList from './../../components/MusicSingerList/MusicSingerList'
 
 export default {
     components: {
         MusicSingerQuickList,
-        MusicScroll
+        MusicScroll,
+        MusicSingerList
     },
 
     data () {
