@@ -53,6 +53,9 @@
         </transition>
         <div class="mini-aution-wrapper" v-show="!fullScreen">
         </div>
+        <audio
+            :src="currentSong.url"
+        ></audio>
     </section>
 </template>
 
@@ -241,7 +244,7 @@ export default {
 }
 
 .header-enter-active, .header-leave-active {
-    transition: all 500ms cubic-bezier(0.86, 0.18, 0.82, 1.32);
+    transition: all 400ms cubic-bezier(0.86, 0.18, 0.82, 1.32);
     transform: translateY(0)
 }
 .header-enter, .header-leave-to {
@@ -249,7 +252,7 @@ export default {
 }
 
 .control-enter-active, .control-leave-active {
-    transition: all 500ms cubic-bezier(0.86, 0.18, 0.82, 1.32);
+    transition: all 400ms cubic-bezier(0.86, 0.18, 0.82, 1.32);
     transform: translateY(0)
 }
 .control-enter, .control-leave-to {
