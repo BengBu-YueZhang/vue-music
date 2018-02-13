@@ -9,7 +9,7 @@
                     <div class="noraml-aution-header" v-show="fullScreen">
                         <h1>{{this.currentSong.name}}</h1>
                         <h2>{{this.currentSong.album}}</h2>
-                        <div class="back" @click="isFullScreen(false)">
+                        <div class="back" @click="setFullScreen(false)">
                             <i class="iconfont icon-moreunfold"></i>
                         </div>
                     </div>
@@ -34,13 +34,22 @@
                             <div class="noraml-aution-control-button-left noraml-aution-control-button-icon">
                                 <i class="iconfont icon-danquxunhuan"></i>
                             </div>
-                            <div class="noraml-aution-control-button-left noraml-aution-control-button-icon">
+                            <div
+                                class="noraml-aution-control-button-left noraml-aution-control-button-icon"
+                                :class="disbaleCls"
+                                @click="prevMusic">
                                 <i class="iconfont icon-back"></i>
                             </div>
-                            <div class="noraml-aution-control-button-center noraml-aution-control-button-icon">
-                                <i class="iconfont icon-zanting"></i>
+                            <div
+                                class="noraml-aution-control-button-center noraml-aution-control-button-icon"
+                                :class="disbaleCls"
+                                @click="playMusic">
+                                <i class="iconfont" :class="playCls"></i>
                             </div>
-                            <div class="noraml-aution-control-button-right noraml-aution-control-button-icon">
+                            <div
+                                class="noraml-aution-control-button-right noraml-aution-control-button-icon"
+                                :class="disbaleCls"
+                                @click="nextMusic">
                                 <i class="iconfont icon-more"></i>
                             </div>
                             <div class="noraml-aution-control-button-right noraml-aution-control-button-icon">
@@ -54,7 +63,10 @@
         <div class="mini-aution-wrapper" v-show="!fullScreen">
         </div>
         <audio
+            ref="audio"
             :src="currentSong.url"
+            @canplay="audioCanplay"
+            @error="audioError"
         ></audio>
     </section>
 </template>
@@ -76,14 +88,96 @@ export default {
 
         ...mapGetters('play', [
             'currentSong'
-        ])
+        ]),
+
+        playCls () {
+            return this.playing ? 'icon-zanting' : 'icon-zanting1'
+        },
+
+        disbaleCls () {
+            return this.isMusicLoad ? '' : 'disbale'
+        }
+    },
+
+    data () {
+        return {
+            // 音乐是否加载完成
+            isMusicLoad: false
+        }
+    },
+
+    watch: {
+        currentSong: {
+            handler (val, oldVal) {
+                this.$nextTick(() => {
+                    this.$refs.audio.play()
+                }) 
+            },
+            deep: true
+        },
+
+        playing (val, oldVal) {
+            this.$nextTick(() => {
+                let audio = this.$refs.audio
+                val ? audio.play() : audio.pause()
+            }) 
+        }
     },
     
     methods: {
         ...mapActions('play', [
             'playFullScreen',
-            'isFullScreen'
+            'setFullScreen',
+            'setPlaying',
+            'setCurrentInde'
         ]),
+        
+        /**
+         * 音乐播放器加载完成
+         */
+        audioCanplay () {
+            this.isMusicLoad = true
+        },
+
+        /**
+         * 音乐播放器加载失败
+         */
+        audioError () {
+            this.isMusicLoad = false
+        },
+
+        /**
+         * 播放音乐
+         */
+        playMusic () {
+            if (!this.isMusicLoad) return
+            this.playing ? this.setPlaying(false) : this.setPlaying(true)
+            this.isMusicLoad = false
+        },
+
+        /**
+         * 上一首音乐
+         */
+        prevMusic () {
+            if (!this.isMusicLoad) return
+            let index = this.currentIndex
+            parseInt(index, 10) == 0 ? index = this.playlist.length - 1 : --index
+            this.setCurrentInde(index)
+            if (!this.playing) this.playMusic() // 改变icon的状态
+            this.isMusicLoad = false
+        },
+        
+        /**
+         * 下一首音乐
+         */
+        nextMusic () {
+            if (!this.isMusicLoad) return
+            let index = this.currentIndex
+            parseInt(index, 10) == this.playlist.length - 1 ? index = 0 : ++index
+            this.setCurrentInde(index)
+            if (!this.playing) this.playMusic()
+            this.isMusicLoad = false
+        }
     }
 }
 </script>
@@ -200,6 +294,7 @@ export default {
         .noraml-aution-control-button {
             display: flex;
             align-items: center;
+            color: @color-theme;
             .noraml-aution-control-button-icon {
                 flex: 1;
             }
@@ -217,9 +312,11 @@ export default {
                 text-align: left;
             }
             i {
-                color: @color-theme;
                 font-size: 28px;
             }
+            .disbale {
+                color: @color-dialog-background;
+            }              
         }
     }
 }

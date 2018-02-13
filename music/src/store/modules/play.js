@@ -56,8 +56,16 @@ export default {
             console.log(song)
         },
 
-        isFullScreen ({ commit }, flag) {
+        setFullScreen ({ commit }, flag) {
             commit('SET_FULL_SCREEN', flag)
+        },
+
+        setPlaying ({ commit }, flag) {
+            commit('SET_PLAYING', true)
+        },
+
+        setCurrentInde ({ commit }, index) {
+            commit('SET_CURRENT_INDEX', index)
         }
     }
 }
