@@ -1,21 +1,27 @@
 <template>
     <section class="ranking-wrappper">
-        <music-ranking-list
-            :ranking-list="rankingList"
-        ></music-ranking-list>
+        <music-scroll
+            class="scroll-view-wrappper"
+            :scroll-data="rankingList">
+            <music-ranking-list
+                :ranking-list="rankingList"
+            ></music-ranking-list>
+        </music-scroll>
     </section>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import MusicRankingList from './../../components/MusicRankingList/MusicRankingList'
+import MusicScroll from './../../components/MusicScroll/MusicScroll'
 import { OK } from './../../config/index'
 import Ranking from './../../model/Ranking'
 import { map } from 'ramda'
 
 export default {
     components: {
-        MusicRankingList
+        MusicRankingList,
+        MusicScroll
     },
 
     data () {
@@ -40,6 +46,7 @@ export default {
             this.GetRankingListAjax().then(res => {
                 if (res.code !== OK) throw new Error(res.message)
                 this.rankingList = this.formattedSingerData(res.data.topList)
+                console.log(this.rankingList)
             }).catch(err => {
                 console.log(err)
             })
@@ -65,5 +72,20 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.ranking-wrappper {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 88px;
+    overflow: hidden;
+    .scroll-view-wrappper {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        overflow: hidden;
+    }
+}
 </style>

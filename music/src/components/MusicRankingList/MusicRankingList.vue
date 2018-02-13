@@ -3,6 +3,7 @@
         <music-ranking-list-item
             v-for="rankingItem in rankingList"
             :key="rankingItem.id"
+            :ranking="rankingItem"
         ></music-ranking-list-item>
     </ul>
 </template>
@@ -27,4 +28,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.ranking-list {
+    width: 100%;
+    height: auto;
+}
 </style>

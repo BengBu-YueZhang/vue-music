@@ -17,17 +17,6 @@
                         :list="singerItem.items"
                         @singer-click="onSingerClick"
                     ></music-singer-list>
-                    <!--
-                    <ul class="singer-content">
-                        <li class="singer-content-item"
-                            v-for="singerContent in singerItem.items"
-                            :key="singerContent.id"
-                            @click="handleSingerClick(singerContent)">
-                            <img v-lazy="singerContent.imgurl">
-                            <span>{{singerContent.name}}</span>
-                        </li>
-                    </ul>
-                    -->
                 </li>
             </ul>
         </music-scroll>
@@ -204,9 +193,11 @@ export default {
         onScroll (posY) {
             this.scrollY = posY
             if (posY >= 0) {
+                // 下拉
                 this.currentIndex = 0
                 return
             } else {
+                // 中间滚
                 for (let i = 0; i < this.singerGroupHeight.length - 1; i++) {
                     let topHeight = this.singerGroupHeight[i]
                     let downHeight = this.singerGroupHeight[i+1]
@@ -217,6 +208,7 @@ export default {
                     }
                 }
                 // 因为push了一个0，所以减去2
+                // 在最后
                 this.currentIndex = this.singerGroupHeight.length - 2
                 return
             }
