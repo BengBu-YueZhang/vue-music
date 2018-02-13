@@ -8,7 +8,7 @@ function throttle (fn, time = 500) {
             self(...rest)
             return isFirst = false
         }
-
+        
         if (timer) {
             return false
         }

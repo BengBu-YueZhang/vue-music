@@ -1,4 +1,4 @@
-import { getHotSearchAjax } from './../../api/search'
+import { getHotSearchAjax, searchKeyAjax } from './../../api/search'
 
 export default {
     namespaced: true,
@@ -9,6 +9,11 @@ export default {
         async GetHotSearchAjax () {
             const hot = await getHotSearchAjax()
             return hot
+        },
+        
+        async SearchKeyAjax ({ commit }, key) {
+            const result = await searchKeyAjax(key)
+            return result
         }
     }
 }
