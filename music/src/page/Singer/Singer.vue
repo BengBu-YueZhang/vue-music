@@ -11,7 +11,13 @@
                 <li v-for="(singerItem, index) in singerList"
                     ref="singerList"
                     :key="index">
-                    <h3 class="singer-title">{{singerItem.key}}</h3>
+                    <!-- 重构解耦 -->
+                    <music-singer-tilte :title="singerItem.key"></music-singer-tilte>
+                    <music-singer-list
+                        :list="singerItem.items"
+                        @singer-click="onSingerClick"
+                    ></music-singer-list>
+                    <!--
                     <ul class="singer-content">
                         <li class="singer-content-item"
                             v-for="singerContent in singerItem.items"
@@ -21,9 +27,11 @@
                             <span>{{singerContent.name}}</span>
                         </li>
                     </ul>
+                    -->
                 </li>
             </ul>
         </music-scroll>
+
         <MusicSingerQuickList
             @touch-start="handleTouchStart"
             @touch-move="handletouchMove"
@@ -46,12 +54,14 @@ import { slice, uniq, map, sort, filter, compose, forEach} from 'ramda'
 import MusicSingerQuickList from './../../components/MusicSingerQuickList/MusicSingerQuickList'
 import MusicScroll from './../../components/MusicScroll/MusicScroll'
 import MusicSingerList from './../../components/MusicSingerList/MusicSingerList'
+import MusicSingerTilte from './../../components/MusicSingerTitle/MusicSingerTitle'
 
 export default {
     components: {
         MusicSingerQuickList,
         MusicScroll,
-        MusicSingerList
+        MusicSingerList,
+        MusicSingerTilte
     },
 
     data () {
@@ -228,7 +238,7 @@ export default {
          * 点击歌手
          * @param {Singer} singer 歌手信息
          */
-        handleSingerClick (singer) {
+        onSingerClick (singer) {
             this.SetSinger(singer)
             this.$router.push(`/singer/${singer.id}`)
         }
@@ -269,25 +279,6 @@ export default {
     padding: 8px 0 8px 14px;
     box-sizing: border-box;
     background-color: @color-highlight-background;
-}
-
-.singer-content-item {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    height: 70px;
-    padding: 20px 0 0 30px;
-    img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-    }
-    span {
-        margin-left: 20px;
-        font-size: @font-size-medium;
-        color: @color-text-l;
-    }
 }
 
 .singer-fixed {
