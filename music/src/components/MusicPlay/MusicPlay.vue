@@ -29,7 +29,11 @@
                 <transition name="control">
                     <div class="noraml-aution-control" v-show="fullScreen">
                         <div class="noraml-aution-control-dot"></div>
-                        <div class="noraml-aution-control-progressbar"></div>
+                        <div class="noraml-aution-control-progressbar">
+                            <span>{{formatTime(currentTime)}}</span>
+                            <music-bar></music-bar>
+                            <span>{{formatTime(currentSong.duration)}}</span>
+                        </div>
                         <div class="noraml-aution-control-button">
                             <div class="noraml-aution-control-button-left noraml-aution-control-button-icon">
                                 <i class="iconfont icon-danquxunhuan"></i>
@@ -67,14 +71,20 @@
             :src="currentSong.url"
             @canplay="audioCanplay"
             @error="audioError"
+            @ontimeupdate="timeUpdate"
         ></audio>
     </section>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import MusicBar from './../MusicBar/MusicBar'
 
 export default {
+    components: {
+        MusicBar
+    },
+
     computed: {
         ...mapState('play', [
             'singer',
@@ -102,7 +112,9 @@ export default {
     data () {
         return {
             // 音乐是否加载完成
-            isMusicLoad: false
+            isMusicLoad: false,
+            // 当前播放时间
+            currentTime: 0
         }
     },
 
@@ -119,6 +131,7 @@ export default {
         playing (val, oldVal) {
             this.$nextTick(() => {
                 let audio = this.$refs.audio
+
                 val ? audio.play() : audio.pause()
             }) 
         }
@@ -143,7 +156,7 @@ export default {
          * 音乐播放器加载失败
          */
         audioError () {
-            this.isMusicLoad = false
+            this.isMusicLoad = true
         },
 
         /**
@@ -177,6 +190,21 @@ export default {
             this.setCurrentInde(index)
             if (!this.playing) this.playMusic()
             this.isMusicLoad = false
+        },
+        
+        /**
+         * 播放时间改变
+         */
+        timeUpdate (ev) {
+            this.currentTime = this.$refs.audio.currentTime
+        },
+
+        formatTime (currentTime) {
+            let minute = Math.floor(currentTime / 60)
+            let second = currentTime % 60
+            if (parseInt(minute) < 10) minute = `0${minute}`
+            if (parseInt(second) < 10) second = `0${second}`
+            return `${minute}:${second}`
         }
     }
 }
