@@ -1,5 +1,5 @@
 <template>
-    <section class="autio-wrapper" v-show="playlist.length > 0">
+    <section class="autio-wrapper" v-if="playlist.length > 0">
         <div class="noraml-aution-wrapper" v-show="fullScreen">
             <div class="noraml-aution-backgrond">
                 <img width="100%" height="100%" :src="currentSong.image"/>
@@ -7,12 +7,16 @@
             <div class="noraml-aution-header">
                 <h1>{{this.currentSong.name}}</h1>
                 <h2>{{this.currentSong.album}}</h2>
-                <div class="back" @click="backRouter"></div>
+                <div class="back" @click="playMini">
+                    <i class="iconfont icon-moreunfold"></i>
+                </div>
             </div>
             <div class="noraml-aution-cd">
                 <div class="noraml-aution-cd-left">
                     <div class="cd">
-                        <div class="cd-play"></div>
+                        <div class="cd-play">
+                            <img :src="currentSong.image"/>
+                        </div>
                     </div>
                     <div class="playing-lyric">
                     </div>
@@ -58,15 +62,16 @@ export default {
         /**
          * 返回上一层
          */
-        backRouter () {
-
+        playMini () {
+            console.log(1)
+            this.playFullScreen(false)
         },
 
         /**
          * 全屏播放
          */
         playFullScreen () {
-            this.playFullScreen()
+            this.playFullScreen(true)
         }
     }
 }
@@ -100,6 +105,36 @@ export default {
     .noraml-aution-header {
         position: relative;
         margin-bottom: 25px;
+        h1 {
+            width: 70%;
+            margin: 0 auto;
+            line-height: 40px;
+            text-align: center;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 18px;
+            color: #fff;
+        }
+        h2 {
+            line-height: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+        }
+        div {
+            position: absolute;
+            top: 0;
+            left: 6px;
+            z-index: 50;
+            i {
+                display: block;
+                padding: 9px;
+                font-size: 30px;
+                font-weight: 600;
+                color: @color-theme;
+            }
+        }
     }
     .noraml-aution-cd {
         position: fixed;
@@ -128,6 +163,11 @@ export default {
                 box-sizing: border-box;
                 border: 10px solid hsla(0,0%,100%,.1);
                 border-radius: 50%;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                }
             }
         }
     }

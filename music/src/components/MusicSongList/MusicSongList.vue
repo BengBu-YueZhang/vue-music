@@ -6,6 +6,7 @@
         ></div>
         <header class="bg-header">
             <h4>{{this.name}}</h4>
+            <i class="iconfont icon-back" @click="back"></i>
         </header>
         <div class="follow-bg" ref="followBg"></div>
         <music-scroll
@@ -126,6 +127,13 @@ export default {
          */
         playSong (info) {
            this.playSongList({list: this.list, ...info}) 
+        },
+
+        /**
+         * 回退路由
+         */
+        back () {
+            this.$router.back()
         }
     }
 }
@@ -165,6 +173,14 @@ export default {
         font-weight: 500;
         line-height: 40px;
         font-size: @font-size-large;
+        color: @color-text;
+    }
+    i {
+        position: absolute;
+        left: 10px;
+        top: 8px;
+        font-weight: 600;
+        font-size: 26px;
         color: @color-text;
     }
 }

@@ -2,6 +2,9 @@
     <header class="app-header">
         <div class="app-header-logo"></div>
         <div class="app-header-title">Music</div>
+        <div class="app-header-icon">
+            <i class="iconfont icon-account"></i>
+        </div>
     </header>
 </template>
 
@@ -36,6 +39,15 @@ export default {
         display: inline-block;
         font-size: @font-size-large;
         line-height: 44px;
+    }
+    .app-header-icon {
+        position: absolute;
+        right: 8px;
+        top: 15px;
+        i {
+            font-size: @font-size-large;
+            color: @color-theme;
+        }
     }
 }
 </style>
