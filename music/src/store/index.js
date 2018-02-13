@@ -5,6 +5,7 @@ import recommend from './modules/recommend'
 import singer from './modules/singer'
 import singerDetail from './modules/singerDetail'
 import play from './modules/play'
+import ranking from './modules/ranking'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,8 @@ export default new Vuex.Store({
         recommend,
         singer,
         singerDetail,
-        play
+        play,
+        ranking
     },
     strict: debug,
     // 类似redux的中间件
