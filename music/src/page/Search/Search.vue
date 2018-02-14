@@ -22,7 +22,10 @@
                             :hot="hot"
                             @search="search"
                         ></music-search-hot>
-                        <music-search-history></music-search-history>
+                        <music-search-history
+                            v-show="searchHistory.length > 0"
+                            :search-history="searchHistory"
+                        ></music-search-history>
                     </div>
                 </div>
             </music-scroll>
@@ -42,6 +45,7 @@ import MusicSearchResult from './../../components/MusicSearchResult/MusicSearchR
 import MusicScroll from './../../components/MusicScroll/MusicScroll'
 import throttle from './../../util/throttle'
 import { map, slice } from 'ramda'
+import { setLocal, getLocal, clearLocal } from './../../util/local'
 
 export default {
     components: {
@@ -61,7 +65,9 @@ export default {
             // 搜索内容
             searchValue: '',
             // 节流搜索
-            searchThrottle: null
+            searchThrottle: null,
+            // 查询历史
+            searchHistory: []
         }
     },
 
@@ -69,6 +75,7 @@ export default {
         // 节流函数
         this.searchThrottle = throttle(this.searchDatabase, 1000)
         this.getHotSearch()
+        this.getSearchHistory()
     },
 
     methods: {
@@ -110,6 +117,13 @@ export default {
             }).catch(err => {
                  console.log(err)
             })
+        },
+
+        /**
+         * 获取查询历史
+         */
+        getSearchHistory () {
+            getLocal('seach') ? this.searchHistory = getLocal('seach') : this.searchHistory = []
         }
     }
 }

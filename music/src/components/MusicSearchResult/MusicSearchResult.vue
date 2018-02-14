@@ -9,7 +9,7 @@
                         v-for="resultItem in result"
                         :key="resultItem.id">
                         <div class="name">
-                            <p class="text">{{resultItem.name}}</p>
+                            <p class="text" v-html="resultItem.name"></p>
                         </div>
                     </li>
                 </ul>
