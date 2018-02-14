@@ -28,7 +28,8 @@ export default {
          * 清楚搜索框中的内容
          */
         close () {
-
+            this.value = ''
+            this.$emit('search', this.value)
         }
     }
 }

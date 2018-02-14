@@ -105,6 +105,7 @@ export default {
             this.SearchKeyAjax(value).then(res => {
                  if (res.code !== OK) throw new Error(res.message)
                  this.result = map(createSong, res.data.song.list)
+                 console.log(this.result)
             }).catch(err => {
                  console.log(err)
             })
