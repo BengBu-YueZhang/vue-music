@@ -1,6 +1,7 @@
 <template>
     <section class="search-wrappper">
         <music-search-input
+            :search-value="searchValue"
             ref="input"
             @search="search"
         ></music-search-input>

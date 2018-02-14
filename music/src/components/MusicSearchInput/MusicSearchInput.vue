@@ -1,17 +1,25 @@
 <template>
     <div class="search-box-wrappper">
         <div class="search-box">
-            <input type="text" placeholder="搜索歌曲，歌手" @input="handleSearchInput"/>
-            <i @click="close" class="iconfont icon-chahao" v-show="value.length > 0"></i>
+            <input
+                type="text"
+                :value="searchValue"
+                placeholder="搜索歌曲，歌手"
+                @input="handleSearchInput"
+            />
+            <i @click="close" class="iconfont icon-chahao" v-show="searchValue.length > 0"></i>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    data () {
-        return {
-            value: ''
+    props: {
+        'search-value': {
+            type: String,
+            default () {
+                return ''
+            }
         }
     },
 
@@ -20,16 +28,14 @@ export default {
          * 搜索框input事件
          */
         handleSearchInput (ev) {
-            this.value = ev.target.value
-            this.$emit('search', this.value)
+            this.$emit('search', ev.target.value)
         },
 
         /**
          * 清楚搜索框中的内容
          */
         close () {
-            this.value = ''
-            this.$emit('search', this.value)
+            this.$emit('search', '')
         }
     }
 }
