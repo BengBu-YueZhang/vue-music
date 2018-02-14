@@ -1,6 +1,6 @@
 <template>
     <section class="user-wrapper">
-        <div class="user-back">
+        <div class="user-back" @click="$router.go(-1)">
             <i class="iconfont icon-back"></i>
         </div>
         <div class="user-header">

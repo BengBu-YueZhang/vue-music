@@ -2,7 +2,7 @@
     <header class="app-header">
         <div class="app-header-logo"></div>
         <div class="app-header-title">Music</div>
-        <div class="app-header-icon">
+        <div class="app-header-icon" @click="$router.push('/user')">
             <i class="iconfont icon-account"></i>
         </div>
     </header>
