@@ -7,6 +7,15 @@
 export default {
     components: {
 
+    },
+
+    props: {
+        result: {
+            type: Array,
+            default () {
+                return []
+            }
+        }
     }
 }
 </script>

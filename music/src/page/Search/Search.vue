@@ -1,12 +1,20 @@
 <template>
     <section class="search-wrappper">
+        <h1>{{showShortcut}}</h1>
         <music-search-input
+            ref="input"
             @search="search"
         ></music-search-input>
-        <div>
-            <music-search-result></music-search-result>
+        <div
+            v-show="result.length !== 0 && searchValue !== ''"
+            class="search-result">
+            <music-search-result
+                :result="result"
+            ></music-search-result>
         </div>
-        <div class="shortcut-wrapper">
+        <div
+            v-show="searchValue === ''"
+            class="shortcut-wrapper">
             <music-scroll class="cube-scroll-wrapper" :scroll-data="hot">
                 <div>
                     <div class="cube-scroll-list-wrapper">
@@ -26,6 +34,7 @@
 import { mapActions } from 'vuex'
 import { OK } from './../../config/index'
 import Hot from './../../model/Hot'
+import { createSong } from './../../model/Song'
 import MusicSearchHistory from './../../components/MusicSearchHistory/MusicSearchHistory'
 import MusicSearchHot from './../../components/MusicSearchHot/MusicSearchHot'
 import MusicSearchInput from './../../components/MusicSearchInput/MusicSearchInput'
@@ -44,8 +53,12 @@ export default {
 
     data () {
         return {
+            // 热搜
             hot: [],
-            result: []
+            // 搜索结果
+            result: [],
+            // 搜索内容
+            searchValue: ''
         }
     },
 
@@ -64,7 +77,6 @@ export default {
          */
         getHotSearch () {
             this.GetHotSearchAjax().then(res => {
-                console.log('111')
                 if (res.code !== OK) throw new Error(res.subcode)
                 this.hot = slice(0, 10, map((item) => new Hot(item.k), res.data.hotkey))
             }).catch(err => {
@@ -77,10 +89,12 @@ export default {
          * @param {String} value 关键字
          */
         search (value) {
-            this.SearchKeyAjax(value).then(res => {
-                console.log(res)
+            this.searchValue = value
+            this.SearchKeyAjax(this.searchValue).then(res => {
+                if (res.code !== OK) throw new Error(res.message)
+                this.result = map(createSong, res.data.song.list)
             }).catch(err => {
-
+                console.log(err)
             })
         }
     }
@@ -98,5 +112,12 @@ export default {
         height: 100%;
         overflow: hidden;
     }
+}
+
+.search-result {
+    position: fixed;
+    width: 100%;
+    top: 178px;
+    bottom: 0;
 }
 </style>
