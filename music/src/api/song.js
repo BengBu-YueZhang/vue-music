@@ -22,7 +22,7 @@ export function getLyric(mid) {
     format: 'json'
   }
 
-  return axios.get(api, {
+  return Axios.get(api, {
     params: data
   }).then((res) => {
     return Promise.resolve(res.data)
