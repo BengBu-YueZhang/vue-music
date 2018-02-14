@@ -51,6 +51,7 @@ export default {
             this.GetSingerDetailAjax().then(res => {
                 if (res.code !== OK) throw new Error(res.message)
                 this.songList = this.formattedSingerData(res.data.list)
+                console.log(this.songList)
             }).catch(err => {
                 console.log(err)
             })

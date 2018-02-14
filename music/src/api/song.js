@@ -54,5 +54,5 @@ export function getVKey(songmid, filename) {
     prefix: 'jp'
   }
 
-  return promiseJSONP(url, data, {...options, param: 'callback'})
+  return promiseJSONP(api, data, {...options, param: 'callback'})
 }
