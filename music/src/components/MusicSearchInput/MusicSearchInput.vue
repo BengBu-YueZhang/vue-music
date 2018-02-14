@@ -8,18 +8,11 @@
 </template>
 
 <script>
-import throttle from './../../util/throttle'
-
 export default {
     data () {
         return {
-            throttleSearch: null,
             value: ''
         }
-    },
-
-    created () {
-        this.throttleSearch = throttle(this.searchValue, 500)
     },
 
     methods: {
@@ -28,15 +21,7 @@ export default {
          */
         handleSearchInput (ev) {
             this.value = ev.target.value
-            this.throttleSearch(this.value)
-        },
-        
-        /**
-         * 请求搜索结果
-         * @param {String} 搜索框的内容
-         */
-        searchValue (value) {
-            this.$emit('search', value)
+            this.$emit('search', this.value)
         },
 
         /**

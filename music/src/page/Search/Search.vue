@@ -6,7 +6,7 @@
             @search="search"
         ></music-search-input>
         <div
-            v-show="result.length !== 0 && searchValue !== ''"
+            v-show="searchValue !== ''"
             class="search-result">
             <music-search-result
                 :result="result"
@@ -40,6 +40,7 @@ import MusicSearchHot from './../../components/MusicSearchHot/MusicSearchHot'
 import MusicSearchInput from './../../components/MusicSearchInput/MusicSearchInput'
 import MusicSearchResult from './../../components/MusicSearchResult/MusicSearchResult'
 import MusicScroll from './../../components/MusicScroll/MusicScroll'
+import throttle from './../../util/throttle'
 import { map, slice } from 'ramda'
 
 export default {
@@ -90,12 +91,12 @@ export default {
          */
         search (value) {
             this.searchValue = value
-            this.SearchKeyAjax(this.searchValue).then(res => {
-                if (res.code !== OK) throw new Error(res.message)
-                this.result = map(createSong, res.data.song.list)
-            }).catch(err => {
-                console.log(err)
-            })
+            // this.SearchKeyAjax(this.searchValue).then(res => {
+            //     if (res.code !== OK) throw new Error(res.message)
+            //     this.result = map(createSong, res.data.song.list)
+            // }).catch(err => {
+            //     console.log(err)
+            // })
         }
     }
 }
