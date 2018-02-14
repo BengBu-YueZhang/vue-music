@@ -33,9 +33,12 @@
                         <div class="noraml-aution-control-dot"></div>
                         <!-- 进度条 -->
                         <div class="noraml-aution-control-progressbar">
-                            <span>{{formatTime(currentTime)}}</span>
-                            <music-bar></music-bar>
-                            <span>{{formatTime(currentSong.duration)}}</span>
+                            <span class="noraml-aution-control-progressbar-left">{{formatTime(currentTime)}}</span>
+                            <music-bar
+                                :plan-proportion="planProportion"
+                                @touch-move="touchBarMove"
+                            ></music-bar>
+                            <span class="noraml-aution-control-progressbar-right">{{formatTime(currentSong.duration)}}</span>
                         </div>
                         <div class="noraml-aution-control-button">
                             <div class="noraml-aution-control-button-left noraml-aution-control-button-icon">
@@ -109,6 +112,11 @@ export default {
 
         disbaleCls () {
             return this.isMusicLoad ? '' : 'disbale'
+        },
+        
+        // 进度比例
+        planProportion () {
+            return this.currentTime / this.currentSong.duration
         }
     },
 
@@ -203,9 +211,16 @@ export default {
         formatTime (currentTime) {
             let minute = Math.floor(currentTime / 60)
             let second = parseInt(Math.floor(currentTime % 60))
-            if (parseInt(minute) < 10) minute = `0${minute}`
             if (parseInt(second) < 10) second = `0${second}`
             return `${minute}:${second}`
+        },
+
+        /**
+         * 拖动滚动条改变时间
+         * @param {Number} proportion 比例
+         */
+        touchBarMove (proportion) {
+            console.log(proportion)
         }
     }
 }
@@ -319,6 +334,20 @@ export default {
             width: 80%;
             margin: 0 auto;
             padding: 10px 0;
+            span {
+                display: inline-block;
+                color: @color-text;
+                font-size: @font-size-small;
+                flex: 0 0 30px;
+                line-height: 30px;
+                width: 30px;
+            }
+            .noraml-aution-control-progressbar-left {
+                text-align: left;
+            }
+            .noraml-aution-control-progressbar-right {
+                text-align: right;
+            }
         }
         .noraml-aution-control-button {
             display: flex;

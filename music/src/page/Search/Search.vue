@@ -24,7 +24,7 @@
                         ></music-search-hot>
                         <music-search-history
                             v-show="searchHistory.length > 0"
-                            :search-history="searchHistory"
+                            :search-history-list="searchHistory"
                         ></music-search-history>
                     </div>
                 </div>

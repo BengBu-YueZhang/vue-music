@@ -9,7 +9,7 @@
         <div class="search-list">
             <ul>
                 <li class="search-item"
-                    v-for="(historyItem, index) in history"
+                    v-for="(historyItem, index) in searchHistoryList"
                     :key="index"
                     @click="searchHistory">
                     <span class="text">{{historyItem.value}}</span>
@@ -25,7 +25,7 @@
 <script>
 export default {
     props: {
-        'search-history': {
+        'search-history-list': {
             type: Array,
             default () {
                 return []
