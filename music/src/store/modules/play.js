@@ -61,10 +61,10 @@ export default {
         },
 
         setPlaying ({ commit }, flag) {
-            commit('SET_PLAYING', true)
+            commit('SET_PLAYING', flag)
         },
 
-        setCurrentInde ({ commit }, index) {
+        setCurrentIndex ({ commit }, index) {
             commit('SET_CURRENT_INDEX', index)
         }
     }

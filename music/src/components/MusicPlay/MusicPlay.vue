@@ -17,7 +17,9 @@
                 <div class="noraml-aution-cd">
                     <div class="noraml-aution-cd-left">
                         <div class="cd">
-                            <div class="cd-play">
+                            <div class="cd-play cd-playing" :style="{
+                                'animationPlayState': playing ? 'running' : 'paused'
+                            }">
                                 <img :src="currentSong.image"/>
                             </div>
                         </div>
@@ -29,6 +31,7 @@
                 <transition name="control">
                     <div class="noraml-aution-control" v-show="fullScreen">
                         <div class="noraml-aution-control-dot"></div>
+                        <!-- 进度条 -->
                         <div class="noraml-aution-control-progressbar">
                             <span>{{formatTime(currentTime)}}</span>
                             <music-bar></music-bar>
@@ -71,7 +74,7 @@
             :src="currentSong.url"
             @canplay="audioCanplay"
             @error="audioError"
-            @ontimeupdate="timeUpdate"
+            @timeupdate="timeUpdate"
         ></audio>
     </section>
 </template>
@@ -131,7 +134,6 @@ export default {
         playing (val, oldVal) {
             this.$nextTick(() => {
                 let audio = this.$refs.audio
-
                 val ? audio.play() : audio.pause()
             }) 
         }
@@ -142,7 +144,7 @@ export default {
             'playFullScreen',
             'setFullScreen',
             'setPlaying',
-            'setCurrentInde'
+            'setCurrentIndex'
         ]),
         
         /**
@@ -165,7 +167,6 @@ export default {
         playMusic () {
             if (!this.isMusicLoad) return
             this.playing ? this.setPlaying(false) : this.setPlaying(true)
-            this.isMusicLoad = false
         },
 
         /**
@@ -175,7 +176,7 @@ export default {
             if (!this.isMusicLoad) return
             let index = this.currentIndex
             parseInt(index, 10) == 0 ? index = this.playlist.length - 1 : --index
-            this.setCurrentInde(index)
+            this.setCurrentIndex(index)
             if (!this.playing) this.playMusic() // 改变icon的状态
             this.isMusicLoad = false
         },
@@ -187,7 +188,7 @@ export default {
             if (!this.isMusicLoad) return
             let index = this.currentIndex
             parseInt(index, 10) == this.playlist.length - 1 ? index = 0 : ++index
-            this.setCurrentInde(index)
+            this.setCurrentIndex(index)
             if (!this.playing) this.playMusic()
             this.isMusicLoad = false
         },
@@ -196,12 +197,12 @@ export default {
          * 播放时间改变
          */
         timeUpdate (ev) {
-            this.currentTime = this.$refs.audio.currentTime
+            this.currentTime = ev.path[0].currentTime
         },
 
         formatTime (currentTime) {
             let minute = Math.floor(currentTime / 60)
-            let second = currentTime % 60
+            let second = parseInt(Math.floor(currentTime % 60))
             if (parseInt(minute) < 10) minute = `0${minute}`
             if (parseInt(second) < 10) second = `0${second}`
             return `${minute}:${second}`
@@ -333,7 +334,7 @@ export default {
                 padding: 0 20px;
                 text-align: center;
                 i {
-                    font-size: 40px;
+                    font-size: 36px;
                 }
             }
             .noraml-aution-control-button-right {
@@ -382,6 +383,20 @@ export default {
 }
 .control-enter, .control-leave-to {
     transform: translateY(100px)
+}
+
+/* cd 动画 */
+@keyframes cd {
+    0% {
+        transform: rotate(0)
+    }
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+.cd-playing {
+    animation: cd 40s infinite;
 }
 </style>
 
