@@ -1,6 +1,5 @@
 <template>
     <section class="search-wrappper">
-        <h1>{{showShortcut}}</h1>
         <music-search-input
             ref="input"
             @search="search"
@@ -59,11 +58,15 @@ export default {
             // 搜索结果
             result: [],
             // 搜索内容
-            searchValue: ''
+            searchValue: '',
+            // 节流搜索
+            searchThrottle: null
         }
     },
 
     created () {
+        // 节流函数
+        this.searchThrottle = throttle(this.searchDatabase, 1000)
         this.getHotSearch()
     },
 
@@ -91,12 +94,20 @@ export default {
          */
         search (value) {
             this.searchValue = value
-            // this.SearchKeyAjax(this.searchValue).then(res => {
-            //     if (res.code !== OK) throw new Error(res.message)
-            //     this.result = map(createSong, res.data.song.list)
-            // }).catch(err => {
-            //     console.log(err)
-            // })
+            this.searchThrottle(this.searchValue)
+        },
+
+        /**
+         * 节流请求搜索
+         * @param {String} value 关键字
+         */
+        searchDatabase (value) {
+            this.SearchKeyAjax(value).then(res => {
+                 if (res.code !== OK) throw new Error(res.message)
+                 this.result = map(createSong, res.data.song.list)
+            }).catch(err => {
+                 console.log(err)
+            })
         }
     }
 }
