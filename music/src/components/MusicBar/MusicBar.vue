@@ -1,16 +1,14 @@
 <template>
-    <div class="bar-wrapper">
+    <div class="bar-wrapper" @click="handleBarClick">
         <div class="bar"
             ref="bar"
             @touchmove="handleBarTouchMove"
-            @touchend="handleBarTouchEnd"
-            @click="handleBarClick">
+            @touchend="handleBarTouchEnd">
             <div
                 ref="barBtn"
                 class="bar-btn-wrapper"
                 @touchstart.shop="handleBarTouchStart">
-                <div class="bar-btn"   
-                ></div>
+                <div class="bar-btn"></div>
             </div>
             <div class="bar-plan"
                 ref="barPlan"
@@ -36,24 +34,22 @@ export default {
             touchInfo: {
                 // 手指触摸的pageX
                 start: 0,
-                // 手指运动的pageX - 开始触摸的pageX = 移动的距离
-                end: 0
+                // 比例
+                proportion: 0
             },
-            // 目前滚动的距离
-            distanceMovedPlan: 0,
-            distanceMovedBtn: 0
+            distanceMove: 0,
+            overallLength: 0
         }
     },
 
     watch: {
        planProportion (val, oldVal) {
            this.$nextTick(() => {
-               let overallLength = this.$refs.bar.clientWidth
-               this.distanceMoved = parseInt(overallLength * val)
-               this.distanceMovedBtn = parseInt((overallLength - 15)*val)
-               this.$refs.barPlan.style.width = `${this.distanceMoved}px`
-               this.$refs.barBtn.style['transform'] = `translateX(${this.distanceMovedBtn}px)`
-               this.$refs.barBtn.style['webkitTransform'] = `translateX(${this.distanceMovedBtn}px)`
+               if (!this.isTouchStart && val >= 0) {
+                   this.overallLength = this.$refs.bar.clientWidth - 16
+                   this.distanceMove = parseInt(this.overallLength * val)
+                   this.setDistanceMove(this.distanceMove)
+               }
            })
        }
     },
@@ -62,8 +58,9 @@ export default {
         /**
          * 进度条点击
          */
-        handleBarClick () {
-
+        handleBarClick (ev) {
+            this.touchInfo.proportion = ev.offsetX / (this.overallLength + 16)
+            this.$emit('touch-end', this.touchInfo.proportion)  
         },
 
         /**
@@ -79,21 +76,32 @@ export default {
          */
         handleBarTouchMove (ev) {
             if (!this.isTouchStart) return
-            this.touchInfo.end = parseInt(ev.touches[0].pageX) - this.touchInfo.start
-            // let currentPageX = this.distanceMoved + this.touchInfo.end
-            // currentPageX = Math.max(0, currentPageX)
-            // currentPageX = Math.min(currentPageX, this.$refs.bar.clientWidth - 15)
-            // this.$refs.barPlan.style.width = `${currentPageX}px`
-            // this.$refs.barBtn.style['transform'] = `translateX(${currentPageX}px)`
-            // this.$refs.barBtn.style['webkitTransform'] = `translateX(${currentPageX}px)`
+            let diff = ev.touches[0].pageX - this.touchInfo.start
+            let currentPageX = this.distanceMove + diff
+            currentPageX = Math.max(0, currentPageX)
+            currentPageX = Math.min(currentPageX, this.overallLength)
+            this.setDistanceMove(currentPageX)
+            this.touchInfo.proportion = currentPageX / this.overallLength
+            this.$emit('touch-move', this.touchInfo.proportion)  
         },
 
         /**
          * 进度条触摸结束
          */
         handleBarTouchEnd () {
+            if (!this.isTouchStart) return
             this.isTouchStart = false
-            
+            this.$emit('touch-end', this.touchInfo.proportion)  
+        },
+        
+        /**
+         * 设置滚动条进度
+         * @param {Number} dist 距离
+         */
+        setDistanceMove (dist) {
+            this.$refs.barPlan.style.width = `${dist}px`
+            this.$refs.barBtn.style['transform'] = `translateX(${dist}px)`
+            this.$refs.barBtn.style['webkitTransform'] = `translateX(${dist}px)`
         }
     }
 }

@@ -37,6 +37,7 @@
                             <music-bar
                                 :plan-proportion="planProportion"
                                 @touch-move="touchBarMove"
+                                @touch-end="touchBarEnd"
                             ></music-bar>
                             <span class="noraml-aution-control-progressbar-right">{{formatTime(currentSong.duration)}}</span>
                         </div>
@@ -125,7 +126,9 @@ export default {
             // 音乐是否加载完成
             isMusicLoad: false,
             // 当前播放时间
-            currentTime: 0
+            currentTime: 0,
+            // 是否在touchmove
+            isTouchmove: false
         }
     },
 
@@ -220,7 +223,18 @@ export default {
          * @param {Number} proportion 比例
          */
         touchBarMove (proportion) {
+            this.isTouchmove = true
+            this.currentTime = proportion * this.currentSong.duration
+        },
+        
+        /**
+         * 拖动结束
+         * @param {Number} proportion 比例
+         */
+        touchBarEnd (proportion) {
             console.log(proportion)
+            this.$refs.audio.currentTime = proportion * this.currentSong.duration
+            if (!this.playing) this.playMusic()
         }
     }
 }
@@ -338,9 +352,9 @@ export default {
                 display: inline-block;
                 color: @color-text;
                 font-size: @font-size-small;
-                flex: 0 0 30px;
+                flex: 0 0 40px;
                 line-height: 30px;
-                width: 30px;
+                width: 40px;
             }
             .noraml-aution-control-progressbar-left {
                 text-align: left;
