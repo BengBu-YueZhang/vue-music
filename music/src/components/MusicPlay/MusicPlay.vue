@@ -425,7 +425,7 @@ export default {
 }
 
 .cd-playing {
-    animation: cd 40s infinite;
+    animation: cd 30s linear infinite;
 }
 </style>
 
