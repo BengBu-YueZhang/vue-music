@@ -161,9 +161,11 @@ export default {
     watch: {
         currentSong: {
             handler (val, oldVal) {
-                this.$nextTick(() => {
-                    this.$refs.audio.play()
-                }) 
+                if (val.id !== oldVal.id) {
+                    this.$nextTick(() => {
+                        this.$refs.audio.play()
+                    })
+                }   
             },
             deep: true
         },
@@ -250,7 +252,6 @@ export default {
          * 播放结束
          */
         ended () {
-            console.log(this.mode)
             if (this.mode !== playMode.loop) {
                 this.nextMusic()
             } else {
@@ -292,10 +293,12 @@ export default {
             this.setMode(nextMode)
             let list = []
             if (this.mode === playMode.random) {
+                // 随机排序
                 list = sort((a, b) => Math.random() - 0.5, this.sequenlist)
             } else {
                 list = this.sequenlist
             }
+            // 保证当前歌曲不变
             this.resetCurrntIndex(list)
             this.setPlaylist(list)
         },
