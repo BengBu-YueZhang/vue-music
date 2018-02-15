@@ -1,7 +1,7 @@
 export const OK = 0
 
 export const playMode = {
-    sequence: 1,
-    loop: 2,
-    random: 3
+    sequence: 0,
+    loop: 1,
+    random: 2
 }

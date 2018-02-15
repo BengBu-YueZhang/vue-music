@@ -6,7 +6,7 @@ export default {
         // 歌手信息
         singer: {},
         // 是否在播放
-        playing: {},
+        playing: false,
         // 是否全屏播放
         fullScreen: false,
         // 播放列表
@@ -53,7 +53,6 @@ export default {
             commit('SER_PLAY_LIST', list)
             commit('SET_SEQUEN_LIST', list)
             commit('SET_CURRENT_INDEX', index)
-            console.log(song)
         },
 
         setFullScreen ({ commit }, flag) {
@@ -66,6 +65,14 @@ export default {
 
         setCurrentIndex ({ commit }, index) {
             commit('SET_CURRENT_INDEX', index)
+        },
+
+        setPlaylist ({ commit }, list) {
+            commit('SER_PLAY_LIST', list)
+        },
+
+        setMode ({ commit }, mode) {
+            commit('SET_MODE', mode)
         }
     }
 }

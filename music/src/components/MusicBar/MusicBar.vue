@@ -60,7 +60,7 @@ export default {
          */
         handleBarClick (ev) {
             this.touchInfo.proportion = ev.offsetX / (this.overallLength + 16)
-            this.$emit('touch-end', this.touchInfo.proportion)  
+            this.$emit('touch-end', this.touchInfo.proportion)
         },
 
         /**

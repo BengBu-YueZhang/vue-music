@@ -42,8 +42,10 @@
                             <span class="noraml-aution-control-progressbar-right">{{formatTime(currentSong.duration)}}</span>
                         </div>
                         <div class="noraml-aution-control-button">
-                            <div class="noraml-aution-control-button-left noraml-aution-control-button-icon">
-                                <i class="iconfont icon-danquxunhuan"></i>
+                            <div
+                                @click="changMode"
+                                class="noraml-aution-control-button-left noraml-aution-control-button-icon">
+                                <i class="iconfont" :class="modClass"></i>
                             </div>
                             <div
                                 class="noraml-aution-control-button-left noraml-aution-control-button-icon"
@@ -72,6 +74,21 @@
             </div>
         </transition>
         <div class="mini-aution-wrapper" v-show="!fullScreen">
+            <div class="icon" @click="setFullScreen(true)">
+                <img class="cd-playing" :style="{
+                'animationPlayState': playing ? 'running' : 'paused'
+                }" :src="currentSong.image"/>
+            </div>
+            <div class="text">
+                <h2>{{this.currentSong.name}}</h2>
+                <p>{{this.currentSong.singer}}</p>
+            </div>
+            <div class="control" @click="playMusic" :class="disbaleCls">
+                <i class="iconfont" :class="playCls"></i>
+            </div>
+            <div class="control">
+                <i class="iconfont icon-less"></i>
+            </div>
         </div>
         <audio
             ref="audio"
@@ -79,6 +96,7 @@
             @canplay="audioCanplay"
             @error="audioError"
             @timeupdate="timeUpdate"
+            @ended="ended"
         ></audio>
     </section>
 </template>
@@ -86,6 +104,8 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import MusicBar from './../MusicBar/MusicBar'
+import { playMode } from './../../config/index'
+import { sort } from 'ramda'
 
 export default {
     components: {
@@ -118,6 +138,12 @@ export default {
         // 进度比例
         planProportion () {
             return this.currentTime / this.currentSong.duration
+        },
+
+        // 播放顺序icon
+        modClass () {
+            let modIcon = this.mode === playMode.sequence ? 'icon-xunhuanbofang' : (this.mode === playMode.loop ? 'icon-danquxunhuan' : 'icon-suijibofang')
+            return modIcon
         }
     },
 
@@ -131,7 +157,7 @@ export default {
             isTouchmove: false
         }
     },
-
+    
     watch: {
         currentSong: {
             handler (val, oldVal) {
@@ -155,7 +181,9 @@ export default {
             'playFullScreen',
             'setFullScreen',
             'setPlaying',
-            'setCurrentIndex'
+            'setCurrentIndex',
+            'setPlaylist',
+            'setMode'
         ]),
         
         /**
@@ -217,6 +245,26 @@ export default {
             if (parseInt(second) < 10) second = `0${second}`
             return `${minute}:${second}`
         },
+        
+        /**
+         * 播放结束
+         */
+        ended () {
+            console.log(this.mode)
+            if (this.mode !== playMode.loop) {
+                this.nextMusic()
+            } else {
+                this.loopMusic()
+            }
+        },
+
+        /**
+         * 循环播放音乐
+         */
+        loopMusic () {
+            this.$refs.audio.currentTime = 0
+            this.$refs.audio.play()
+        },
 
         /**
          * 拖动滚动条改变时间
@@ -232,9 +280,32 @@ export default {
          * @param {Number} proportion 比例
          */
         touchBarEnd (proportion) {
-            console.log(proportion)
             this.$refs.audio.currentTime = proportion * this.currentSong.duration
             if (!this.playing) this.playMusic()
+        },
+
+        /**
+         * 切换播放模式
+         */
+        changMode () {
+            let nextMode = (this.mode + 1) % 3 
+            this.setMode(nextMode)
+            let list = []
+            if (this.mode === playMode.random) {
+                list = sort((a, b) => a - Math.random(), this.sequenlist)
+            } else {
+                list = this.sequenlist
+            }
+            this.resetCurrntIndex(list)
+            this.setPlaylist(list)
+        },
+        
+        /**
+         * 重新设置当前播放的索引
+         */
+        resetCurrntIndex (list) {
+            let index = list.findIndex((item) => item.id === this.currentSong.id)
+            this.setCurrentIndex(index)
         }
     }
 }
@@ -377,7 +448,7 @@ export default {
                 padding: 0 20px;
                 text-align: center;
                 i {
-                    font-size: 36px;
+                    font-size: 30px;
                 }
             }
             .noraml-aution-control-button-right {
@@ -394,6 +465,9 @@ export default {
 }
 
 .mini-aution-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     position: fixed;
     left: 0;
     right: 0;
@@ -401,6 +475,52 @@ export default {
     width: 100%;
     height: 60px;
     background-color: @color-highlight-background;
+    z-index: 999;
+    .icon {
+        flex: 0 0 40px;
+        width: 40px;
+        height: 40px;
+        padding: 0 10px 0 20px;
+        box-sizing: content-box;
+        img {
+            width: 40px;
+            border-radius: 50%;
+            transform-origin: center center;
+        }
+    }
+    .text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+        line-height: 20px;
+        overflow: hidden;
+        h2 {
+            margin-bottom: 2px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 14px;
+            color: #fff;
+        }
+        p {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: @font-size-small;
+            color: @color-text-d;
+        }
+    }
+    .control {
+        flex: 0 0 30px;
+        width: 30px;
+        padding: 0 10px;
+        box-sizing: content-box;
+        i {
+            font-size: 30px;
+            color: @color-theme;
+        }
+    }
 }
 
 /* 动画样式 */
