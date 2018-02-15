@@ -292,7 +292,7 @@ export default {
             this.setMode(nextMode)
             let list = []
             if (this.mode === playMode.random) {
-                list = sort((a, b) => a - Math.random(), this.sequenlist)
+                list = sort((a, b) => Math.random() - 0.5, this.sequenlist)
             } else {
                 list = this.sequenlist
             }
