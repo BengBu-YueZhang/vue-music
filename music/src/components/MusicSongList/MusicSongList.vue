@@ -123,7 +123,7 @@ export default {
 
         /**
          * 播放音乐
-         * @param {Object} info 歌曲信息
+         * @param {Object} info 点击歌曲信息
          */
         playSong (info) {
            this.playSongList({list: this.list, ...info}) 

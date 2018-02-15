@@ -161,8 +161,13 @@ export default {
     watch: {
         currentSong: {
             handler (val, oldVal) {
-                if (val.id !== oldVal.id) {
+                if (!oldVal || val.id !== oldVal.id) {
                     this.$nextTick(() => {
+                        val.getLyric().then(res => {
+                            console.log(res)
+                        }).catch(err => {
+                            console.log(err)
+                        })
                         this.$refs.audio.play()
                     })
                 }   

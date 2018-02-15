@@ -24,13 +24,14 @@ export default class Song {
     }
   
     getLyric() {
+      // 歌词
       if (this.lyric) {
         return Promise.resolve(this.lyric)
       }
   
       return new Promise((resolve, reject) => {
         getLyric(this.mid).then((res) => {
-          if (res.retcode === ERR_OK) {
+          if (res.retcode === OK) {
             this.lyric = Base64.decode(res.lyric)
             resolve(this.lyric)
           } else {

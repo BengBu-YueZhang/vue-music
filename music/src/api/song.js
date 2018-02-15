@@ -5,7 +5,7 @@ import { getUid } from './../util/uid'
 const debug = process.env.NODE_ENV !== 'production'
 
 export function getLyric(mid) {
-  const api = debug ? '/api/lyric' : 'http://ustbhuangyi.com/music/api/lyric'
+  const api = debug ? '/music/api/lyric' : 'http://ustbhuangyi.com/music/api/lyric'
 
   const data = {
     g_tk: 1928093487,
@@ -25,7 +25,7 @@ export function getLyric(mid) {
   return Axios.get(api, {
     params: data
   }).then((res) => {
-    return Promise.resolve(res.data)
+    return Promise.resolve(res)
   })
 }
 
