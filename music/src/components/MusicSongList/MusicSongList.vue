@@ -2,8 +2,14 @@
     <div class="music-song-wrapper">
         <div class="bg"
             ref="Bg"
-            :style="{background: `url(${bg}) no-repeat`, backgroundSize: 'cover'}"
-        ></div>
+            :style="{background: `url(${bg}) no-repeat`, backgroundSize: 'cover'}">
+            <div class="random-btn-wrappper" ref="randomBtn" @click="randomAll">
+                <div class="random-btn">
+                    <i class="iconfont icon-zanting1"></i>
+                    <span>随机播放全部</span>
+                </div>
+            </div>
+        </div>
         <header class="bg-header">
             <h4>{{this.name}}</h4>
             <i class="iconfont icon-back" @click="back"></i>
@@ -99,10 +105,12 @@ export default {
                 this.$refs.Bg.style.height = '40px'
                 this.$refs.Bg.style.paddingTop = 0
                 this.$refs.Bg.style.zIndex = 50
+                this.$refs.randomBtn.style.display = 'none'
             } else if (Math.abs(val) < this.maxScrollY && val < 0) {
                 this.$refs.Bg.style.height = 0
                 this.$refs.Bg.style.paddingTop = '70%'
                 this.$refs.Bg.style.zIndex = 0
+                this.$refs.randomBtn.style.display = 'block'
             }
             
         }
@@ -110,7 +118,8 @@ export default {
 
     methods: {
         ...mapActions('play', [
-            'playSongList'
+            'playSongList',
+            'randomPlayAll'
         ]),
 
         /**
@@ -134,6 +143,15 @@ export default {
          */
         back () {
             this.$router.back()
+        },
+
+        /**
+         * 随机播放全部
+         */
+        randomAll () {
+            this.randomPlayAll({
+                list: this.list
+            })
         }
     }
 }
@@ -184,6 +202,41 @@ export default {
         color: @color-text;
     }
 }
+
+.random-btn-wrappper {
+    position: absolute;
+    bottom: 20px;
+    z-index: 50;
+    width: 100%;
+    .random-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        width: 135px;
+        padding: 7px 0;
+        margin: 0 auto;
+        text-align: center;
+        border: 1px solid #ffcd32;
+        color: #ffcd32;
+        border-radius: 100px;
+        font-size: 0;
+        i {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 6px;
+            font-size: 16px;
+        }
+        span {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 12px;
+            line-height: 16px;
+        }
+    }
+}
+
+
 
 .follow-bg {
     position: relative;

@@ -1,4 +1,5 @@
 import { playMode } from './../../config/index'
+import { sort } from 'ramda'
 
 export default {
     namespaced: true,
@@ -11,7 +12,7 @@ export default {
         fullScreen: false,
         // 播放列表
         playlist: [],
-        // 顺序列表
+        // 顺序列表,存储最开始的顺序歌曲列表
         sequenlist: [],
         // 播放顺序
         mode: playMode.sequence,
@@ -47,12 +48,28 @@ export default {
         }
     },
     actions: {
+        // 播放单曲（播放规则需要判读）
         playSongList ({ commit, state }, {index, song, list}) {
             commit('SET_PLAYING', true)
             commit('SET_FULL_SCREEN', true)
-            commit('SER_PLAY_LIST', list)
             commit('SET_SEQUEN_LIST', list)
+            if (state.mode == playMode.random) {
+                commit('SER_PLAY_LIST', sort((a,b) => 0.5 - Math.random(), list))
+                index = state.playlist.findIndex(item => item.id === song.id)
+            } else {
+                commit('SER_PLAY_LIST', list)
+            }
             commit('SET_CURRENT_INDEX', index)
+        },
+
+        // 随机播放全部
+        randomPlayAll ({ commit, state }, { list }) {
+            commit('SET_PLAYING', true)
+            commit('SET_FULL_SCREEN', true)
+            commit('SET_MODE', playMode.random)
+            commit('SET_SEQUEN_LIST', list)
+            commit('SER_PLAY_LIST', sort((a,b) => 0.5 - Math.random(), list))
+            commit('SET_CURRENT_INDEX', 0)
         },
 
         setFullScreen ({ commit }, flag) {
