@@ -102,6 +102,7 @@ export default {
          */
         search (value) {
             this.searchValue = value
+            if (this.searchValue === '') return
             this.searchThrottle(this.searchValue)
         },
 

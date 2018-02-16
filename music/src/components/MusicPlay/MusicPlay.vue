@@ -163,6 +163,7 @@ export default {
             handler (val, oldVal) {
                 if (!oldVal || val.id !== oldVal.id) {
                     this.$nextTick(() => {
+                        // 获取歌词
                         val.getLyric().then(res => {
                             console.log(res)
                         }).catch(err => {
