@@ -15,7 +15,7 @@
                     </div>
                 </transition>
                 <div class="noraml-aution-cd">
-                    <div class="noraml-aution-cd-left">
+                    <div class="noraml-aution-cd-left" v-show="!isShowLyric">
                         <div class="cd">
                             <div class="cd-play cd-playing" :style="{
                                 'animationPlayState': playing ? 'running' : 'paused'
@@ -23,10 +23,19 @@
                                 <img :src="currentSong.image"/>
                             </div>
                         </div>
-                        <div class="playing-lyric">
-                        </div>
                     </div>
-                    <div class="noraml-aution-cd-right"></div>
+                    <music-scroll
+                        ref="lysicScroll"
+                        class="noraml-aution-cd-right"
+                        v-show="isShowLyric"
+                        :scroll-data="currentLysic">
+                        <div class="playing-lyric">
+                            <music-lyric
+                                :lyric="currentLysic"
+                                :current-index="currentLysicNumber"
+                            ></music-lyric>
+                        </div>
+                    </music-scroll>
                 </div>
                 <transition name="control">
                     <div class="noraml-aution-control" v-show="fullScreen">
@@ -106,10 +115,15 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import MusicBar from './../MusicBar/MusicBar'
 import { playMode } from './../../config/index'
 import { sort } from 'ramda'
+import Lyric from 'lyric-parser'
+import MusicLyric from './../MusicLyric/MusicLyric'
+import MusicScroll from './../MusicScroll/MusicScroll'
 
 export default {
     components: {
-        MusicBar
+        MusicBar,
+        MusicLyric,
+        MusicScroll
     },
 
     computed: {
@@ -154,21 +168,26 @@ export default {
             // 当前播放时间
             currentTime: 0,
             // 是否在touchmove
-            isTouchmove: false
+            isTouchmove: false,
+            // 当前的歌词
+            currentLysic: null,
+            // 是否显示歌词
+            isShowLyric: true,
+            // 当前歌词的索引
+            currentLysicNumber: 0
         }
     },
     
     watch: {
         currentSong: {
             handler (val, oldVal) {
+                if (this.currentLysic) {
+                    this.currentLysic.stop()
+                }
                 if (!oldVal || val.id !== oldVal.id) {
                     this.$nextTick(() => {
                         // 获取歌词
-                        val.getLyric().then(res => {
-                            console.log(res)
-                        }).catch(err => {
-                            console.log(err)
-                        })
+                        this.lyric()
                         this.$refs.audio.play()
                     })
                 }   
@@ -214,6 +233,9 @@ export default {
         playMusic () {
             if (!this.isMusicLoad) return
             this.playing ? this.setPlaying(false) : this.setPlaying(true)
+            if (this.currentLysic) {
+                this.currentLysic.togglePlay()
+            }
         },
 
         /**
@@ -223,6 +245,10 @@ export default {
             if (!this.isMusicLoad) return
             let index = this.currentIndex
             parseInt(index, 10) == 0 ? index = this.playlist.length - 1 : --index
+            if (this.playlist.length === 1) {
+                this.loopMusic()
+                return
+            }
             this.setCurrentIndex(index)
             if (!this.playing) this.playMusic() // 改变icon的状态
             this.isMusicLoad = false
@@ -235,6 +261,10 @@ export default {
             if (!this.isMusicLoad) return
             let index = this.currentIndex
             parseInt(index, 10) == this.playlist.length - 1 ? index = 0 : ++index
+            if (this.playlist.length === 1) {
+                this.loopMusic()
+                return
+            }
             this.setCurrentIndex(index)
             if (!this.playing) this.playMusic()
             this.isMusicLoad = false
@@ -271,6 +301,10 @@ export default {
         loopMusic () {
             this.$refs.audio.currentTime = 0
             this.$refs.audio.play()
+            if (this.currentLysic) {
+                this.currentLysic.seek(0)
+                this.lysicScroll.scrollTo(0, 0, 1000)
+            }
         },
 
         /**
@@ -315,6 +349,35 @@ export default {
         resetCurrntIndex (list) {
             let index = list.findIndex((item) => item.id === this.currentSong.id)
             this.setCurrentIndex(index)
+        },
+
+        /**
+         * 获取歌词
+         */
+        lyric () {
+            this.currentSong.getLyric().then(res => {
+                this.currentLysic = new Lyric(res, this.lyricCallback)
+                console.log(this.currentLysic)
+                if (this.currentLysic) {
+                    // 滚动歌词
+                    this.currentLysic.play()
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+
+        /**
+         * 获取歌词回调
+         */
+        lyricCallback ({txt, lineNum}) {
+            this.currentLysicNumber = lineNum
+            // 歌词保持在中间
+            if (lineNum > 5) {
+                this.$refs.lysicScroll.scrollTo(0, -((lineNum - 5)*22), 1000)
+            } else {
+                this.$refs.lysicScroll.scrollTo(0, 0, 1000)
+            }
         }
     }
 }
@@ -412,6 +475,13 @@ export default {
                     border-radius: 50%;
                 }
             }
+        }
+        .noraml-aution-cd-right {
+            display: inline-block;
+            vertical-align: top;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
     }
     .noraml-aution-control {

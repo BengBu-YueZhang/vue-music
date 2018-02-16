@@ -62,6 +62,8 @@ export default {
             hot: [],
             // 搜索结果
             result: [],
+            // 缓存搜索结果
+            cacheResult: {},
             // 搜索内容
             searchValue: '',
             // 节流搜索
@@ -102,7 +104,11 @@ export default {
          */
         search (value) {
             this.searchValue = value
-            if (this.searchValue === '') return
+
+            if (this.searchValue === '') {
+                this.result = []
+                return
+            }
             this.searchThrottle(this.searchValue)
         },
 
@@ -114,7 +120,8 @@ export default {
             this.SearchKeyAjax(value).then(res => {
                  if (res.code !== OK) throw new Error(res.message)
                  this.result = map(createSong, res.data.song.list)
-                 console.log(this.result)
+                 // 缓存代理模式
+                 // this.cacheResult[value] = this.result
             }).catch(err => {
                  console.log(err)
             })

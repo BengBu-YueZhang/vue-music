@@ -59,7 +59,7 @@ export default {
          * 进度条点击
          */
         handleBarClick (ev) {
-            this.touchInfo.proportion = ev.pageX - (this.$refs.bar.getBoundingClientRect().left) / (this.overallLength + 16)
+            this.touchInfo.proportion = (ev.pageX - (this.$refs.bar.getBoundingClientRect().left)) / (this.overallLength + 16)
             this.$emit('touch-end', this.touchInfo.proportion)
         },
 
