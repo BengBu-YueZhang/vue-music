@@ -26,8 +26,11 @@ import MusicRecommendSong from './../../components/MusicRecommendSong/MusicRecom
 import MusicTitle from './../../components/MusicTitle/MusicTitle'
 import MusicScroll from './../../components/MusicScroll/MusicScroll'
 import MusicLoading from './../../components/MusicLoading/MusicLoading'
+import Mixins from './../../common/js/Mixin'
 
 export default {
+    mixins: [Mixins],
+
     components: {
         MusicSwiper,
         MusicRecommendSong,
@@ -76,6 +79,15 @@ export default {
             }).catch(err => {
                 console.log(err)
             })
+        },
+
+        handleFullScreenChange () {
+            if (this.playlist.length && !this.fullScreen) {
+                this.$refs.iscoll.$el.style.bottom = '60px'
+            } else {
+                this.$refs.iscoll.$el.style.bottom = '0'
+            }
+            this.$refs.iscoll.refresh()
         }
     }
 }

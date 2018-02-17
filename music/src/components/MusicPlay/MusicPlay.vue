@@ -14,28 +14,32 @@
                         </div>
                     </div>
                 </transition>
-                <div class="noraml-aution-cd">
-                    <div class="noraml-aution-cd-left" v-show="!isShowLyric">
-                        <div class="cd">
-                            <div class="cd-play cd-playing" :style="{
-                                'animationPlayState': playing ? 'running' : 'paused'
-                            }">
-                                <img :src="currentSong.image"/>
+                <div class="noraml-aution-cd" @click="isShowLyric = !isShowLyric">
+                    <transition name="lyric">
+                        <div class="noraml-aution-cd-left" v-show="!isShowLyric">
+                            <div class="cd">
+                                <div class="cd-play cd-playing" :style="{
+                                    'animationPlayState': playing ? 'running' : 'paused'
+                                }">
+                                    <img :src="currentSong.image"/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <music-scroll
-                        ref="lysicScroll"
-                        class="noraml-aution-cd-right"
-                        v-show="isShowLyric"
-                        :scroll-data="currentLysic">
-                        <div class="playing-lyric">
-                            <music-lyric
-                                :lyric="currentLysic"
-                                :current-index="currentLysicNumber"
-                            ></music-lyric>
-                        </div>
-                    </music-scroll>
+                    </transition>
+                    <transition name="lyric">
+                        <music-scroll
+                            ref="lysicScroll"
+                            class="noraml-aution-cd-right"
+                            v-show="isShowLyric"
+                            :scroll-data="currentLysic">
+                            <div class="playing-lyric">
+                                <music-lyric
+                                    :lyric="currentLysic"
+                                    :current-index="currentLysicNumber"
+                                ></music-lyric>
+                            </div>
+                        </music-scroll>
+                    </transition>
                 </div>
                 <transition name="control">
                     <div class="noraml-aution-control" v-show="fullScreen">
@@ -174,7 +178,7 @@ export default {
             // 当前的歌词
             currentLysic: null,
             // 是否显示歌词
-            isShowLyric: true,
+            isShowLyric: false,
             // 当前歌词的索引
             currentLysicNumber: 0
         }
@@ -373,6 +377,7 @@ export default {
                     return
                 }
                 this.currentLysic = new Lyric(res, this.lyricCallback)
+                this.currentLysicLength = this.currentLysic.lines.length
                 if (this.currentLysic && this.canLyricPlay) {
                     this.currentLysic.seek(this.currentTime)
                 }
@@ -389,7 +394,7 @@ export default {
             // 歌词保持在中间
             if (lineNum > 5) {
                 this.$refs.lysicScroll.scrollTo(0, -((lineNum - 5)*32), 1000)
-            } else {
+            } else if (lineNum < 5) {
                 this.$refs.lysicScroll.scrollTo(0, 0, 1000)
             }
         },
@@ -660,6 +665,14 @@ export default {
 }
 .control-enter, .control-leave-to {
     transform: translateY(100px)
+}
+
+.lyric-enter-active, .lyric-leave-active {
+    transition: all 200ms;
+    opacity: 1;
+}
+.lyric-enter, .lyric-leave-to {
+    opacity: 0;
 }
 
 /* cd 动画 */

@@ -39,8 +39,10 @@
 import MusicScroll from './../MusicScroll/MusicScroll'
 import MusicSongEntry from './../MusicSongEntry/MusicSongEntry'
 import { mapActions } from 'vuex'
+import Mixins from './../../common/js/Mixin'
 
 export default {
+    mixins: [Mixins],
     components: {
         MusicScroll,
         MusicSongEntry
@@ -152,6 +154,15 @@ export default {
             this.randomPlayAll({
                 list: this.list
             })
+        },
+
+        handleFullScreenChange () {
+            if (this.playlist.length && !this.fullScreen) {
+                this.$refs.scrollViewWrapper.$el.style.bottom = '60px'
+            } else {
+                this.$refs.scrollViewWrapper.$el.style.bottom = '0'
+            }
+            this.$refs.scrollViewWrapper.refresh()
         }
     }
 }

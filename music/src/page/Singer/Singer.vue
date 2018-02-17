@@ -44,8 +44,11 @@ import MusicSingerQuickList from './../../components/MusicSingerQuickList/MusicS
 import MusicScroll from './../../components/MusicScroll/MusicScroll'
 import MusicSingerList from './../../components/MusicSingerList/MusicSingerList'
 import MusicSingerTilte from './../../components/MusicSingerTitle/MusicSingerTitle'
+import Mixin from './../../common/js/Mixin'
 
 export default {
+    mixins: [Mixin],
+
     components: {
         MusicSingerQuickList,
         MusicScroll,
@@ -233,6 +236,15 @@ export default {
         onSingerClick (singer) {
             this.SetSinger(singer)
             this.$router.push(`/singer/${singer.id}`)
+        },
+
+        handleFullScreenChange () {
+            if (this.playlist.length && !this.fullScreen) {
+                this.$refs.iscoll.$el.style.bottom = '60px'
+            } else {
+                this.$refs.iscoll.$el.style.bottom = '0'
+            }
+            this.$refs.iscoll.refresh()
         }
     }
 }
