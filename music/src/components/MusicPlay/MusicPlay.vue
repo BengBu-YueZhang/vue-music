@@ -106,6 +106,8 @@
             @error="audioError"
             @timeupdate="timeUpdate"
             @ended="ended"
+            @playing="ready"
+            @pause="paused"
         ></audio>
     </section>
 </template>
@@ -181,14 +183,19 @@ export default {
     watch: {
         currentSong: {
             handler (val, oldVal) {
+                this.isMusicLoad = false
+                this.canLyricPlay = false
                 if (this.currentLysic) {
                     this.currentLysic.stop()
+                    this.currentLysic = null
+                    this.currentLysicNumber = 0
                 }
                 if (!oldVal || val.id !== oldVal.id) {
                     this.$nextTick(() => {
+                        this.$refs.audio.src = val.url
+                        this.$refs.audio.play()
                         // 获取歌词
                         this.lyric()
-                        this.$refs.audio.play()
                     })
                 }   
             },
@@ -314,6 +321,9 @@ export default {
         touchBarMove (proportion) {
             this.isTouchmove = true
             this.currentTime = proportion * this.currentSong.duration
+            if (this.currentLysic) {
+                this.currentLysic.seek(this.currentTime * 1000)
+            }
         },
         
         /**
@@ -323,6 +333,9 @@ export default {
         touchBarEnd (proportion) {
             this.$refs.audio.currentTime = proportion * this.currentSong.duration
             if (!this.playing) this.playMusic()
+            if (this.currentLysic) {
+                this.currentLysic.seek(proportion * this.currentSong.duration * 1000)
+            }
         },
 
         /**
@@ -356,11 +369,12 @@ export default {
          */
         lyric () {
             this.currentSong.getLyric().then(res => {
+                if (this.currentSong.lyric !== res) {
+                    return
+                }
                 this.currentLysic = new Lyric(res, this.lyricCallback)
-                console.log(this.currentLysic)
-                if (this.currentLysic) {
-                    // 滚动歌词
-                    this.currentLysic.play()
+                if (this.currentLysic && this.canLyricPlay) {
+                    this.currentLysic.seek(this.currentTime)
                 }
             }).catch(err => {
                 console.log(err)
@@ -374,9 +388,30 @@ export default {
             this.currentLysicNumber = lineNum
             // 歌词保持在中间
             if (lineNum > 5) {
-                this.$refs.lysicScroll.scrollTo(0, -((lineNum - 5)*22), 1000)
+                this.$refs.lysicScroll.scrollTo(0, -((lineNum - 5)*32), 1000)
             } else {
                 this.$refs.lysicScroll.scrollTo(0, 0, 1000)
+            }
+        },
+
+        /**
+         * 歌曲开始播放
+         */
+        ready () {
+            this.isMusicLoad = true
+            this.canLyricPlay = true
+            if (this.currentLysic) {
+                this.currentLysic.seek(this.currentTime * 1000)
+            }
+        },
+
+        /**
+         * 暂停
+         */
+        paused () {
+            this.setPlaying(false)
+            if (this.currentLysic) {
+                this.currentLysic.stop()
             }
         }
     }
